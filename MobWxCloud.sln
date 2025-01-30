@@ -11,6 +11,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobWx.AppHost", "MobWx.AppH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobWx.API", "MobWx.API\MobWx.API.csproj", "{49294D24-5880-471F-BB65-D6336B4AB8D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobWx.Lib", "MobWx.Lib\MobWx.Lib.csproj", "{64AA8968-3091-4EB9-808C-23A5E5C7A8C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47909FA3-5C08-445E-BC25-C4EE19FEAE9C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobWx.Tests", "MobWx.Tests\MobWx.Tests.csproj", "{56DD2B2A-B5E8-48AD-8282-2DC831E85EA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +44,14 @@ Global
 		{49294D24-5880-471F-BB65-D6336B4AB8D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49294D24-5880-471F-BB65-D6336B4AB8D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49294D24-5880-471F-BB65-D6336B4AB8D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64AA8968-3091-4EB9-808C-23A5E5C7A8C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64AA8968-3091-4EB9-808C-23A5E5C7A8C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64AA8968-3091-4EB9-808C-23A5E5C7A8C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64AA8968-3091-4EB9-808C-23A5E5C7A8C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56DD2B2A-B5E8-48AD-8282-2DC831E85EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56DD2B2A-B5E8-48AD-8282-2DC831E85EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56DD2B2A-B5E8-48AD-8282-2DC831E85EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56DD2B2A-B5E8-48AD-8282-2DC831E85EA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
