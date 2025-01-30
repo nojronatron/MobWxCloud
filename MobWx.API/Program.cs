@@ -2,9 +2,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+var httpClientBaseUrl = builder.Configuration["HttpClient:WeatherApiAddress"] ?? "localhost";
+var httpUserAgent = builder.Configuration["HttpClient:UserAgentHeader"] ?? null;
+var httpAcceptHeader = builder.Configuration["HttpClient:AcceptHeader"] ?? null;
+var httpCtsTimeout = builder.Configuration["HttpClient:CancelTokenTimeout"] ?? "2000";
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddHttpClient("NwsClient", config =>
+{
+    config.BaseAddress = new Uri(httpClientBaseUrl);
+    config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
+    config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
+    config.Timeout = TimeSpan.FromSeconds(int.Parse(httpCtsTimeout));
+});
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -20,29 +34,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/health", () =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    return "Healthy";
 })
-.WithName("GetWeatherForecast")
+.WithName("Health")
 .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
