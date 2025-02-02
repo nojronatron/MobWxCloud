@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MobWx.API\MobWx.API.csproj" />
     <ProjectReference Include="..\MobWx.Lib\MobWx.Lib.csproj" />
   </ItemGroup>
 

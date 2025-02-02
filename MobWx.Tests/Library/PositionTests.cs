@@ -1,7 +1,7 @@
 using MobWx.Lib.Models;
 using Xunit;
 
-namespace MobWx.Tests
+namespace MobWx.Tests.Library
 {
     public class PositionTests
     {
@@ -10,7 +10,7 @@ namespace MobWx.Tests
         {
             // Arrange
             // Act
-            var position = Position.CreatePosition(string.Empty, string.Empty);
+            var position = Position.Create(string.Empty, string.Empty);
 
             // Assert
             Assert.True(position is NullPosition);
@@ -21,7 +21,7 @@ namespace MobWx.Tests
         {
             // Arrange
             // Act
-            var position = Position.CreatePosition("45.0", "90.0");
+            var position = Position.Create("45.0", "90.0");
 
             // Assert
             Assert.True(position is not NullPosition);
@@ -79,7 +79,7 @@ namespace MobWx.Tests
         public void CreatePosition_ShouldReturnNullPosition_WhenLatitudeOrLongitudeIsEmpty()
         {
             // Act
-            var result = Position.CreatePosition(string.Empty, "90.0");
+            var result = Position.Create(string.Empty, "90.0");
 
             // Assert
             Assert.IsType<NullPosition>(result);
@@ -89,7 +89,7 @@ namespace MobWx.Tests
         public void CreatePosition_ShouldReturnPosition_WhenLatitudeAndLongitudeAreValid()
         {
             // Act
-            var result = Position.CreatePosition("45.0", "90.0");
+            var result = Position.Create("45.0", "90.0");
 
             // Assert
             Assert.IsType<Position>(result);
@@ -99,7 +99,7 @@ namespace MobWx.Tests
         public void ToString_ShouldReturnFormattedString()
         {
             // Arrange
-            var position = Position.CreatePosition("45.0", "90.0");
+            var position = Position.Create("45.0", "90.0");
 
             // Act
             var result = position.ToString();
