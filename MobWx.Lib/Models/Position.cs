@@ -62,7 +62,7 @@
             );
         }
 
-        public static PositionBase CreatePosition(string? lattitude, string? longitude)
+        public static PositionBase Create(string? lattitude, string? longitude)
         {
             if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
             {
