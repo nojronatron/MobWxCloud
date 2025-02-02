@@ -1,108 +1,107 @@
-﻿namespace MobWx.Lib.Models
+﻿namespace MobWx.Lib.Models;
+
+public class Position : PositionBase
 {
-    public class Position : PositionBase
+    private string _latitude;
+    public string _longitude;
+    public string _altitude; // optional
+
+    public bool IsEmpty
     {
-        private string _latitude;
-        public string _longitude;
-        public string _altitude; // optional
+        get => string.IsNullOrWhiteSpace(_latitude)
+            && string.IsNullOrWhiteSpace(_longitude);
+    }
 
-        public bool IsEmpty
+    private Position()
+    {
+        _latitude = string.Empty;
+        _longitude = string.Empty;
+        _altitude = string.Empty;
+    }
+
+    public override string GetLatitude()
+    {
+        return _latitude;
+    }
+
+    public override string GetLongitude()
+    {
+        return _longitude;
+    }
+
+    public override string GetAltitude()
+    {
+        return _altitude;
+    }
+
+    public static bool IsValidLatitude(string latitude)
+    {
+        if (string.IsNullOrWhiteSpace(latitude))
         {
-            get => string.IsNullOrWhiteSpace(_latitude)
-                && string.IsNullOrWhiteSpace(_longitude);
+            return false;
         }
 
-        private Position()
+        return
+        (
+            -90.0 <= double.Parse(latitude)
+            && double.Parse(latitude) <= 90.0
+        );
+    }
+
+    public static bool IsValidLongitude(string longitude)
+    {
+        if (string.IsNullOrWhiteSpace(longitude))
         {
-            _latitude = string.Empty;
-            _longitude = string.Empty;
-            _altitude = string.Empty;
+            return false;
         }
 
-        public override string GetLatitude()
+        return
+        (
+            -180.0 <= double.Parse(longitude)
+            && double.Parse(longitude) <= 180.0
+        );
+    }
+
+    public static PositionBase Create(string? lattitude, string? longitude)
+    {
+        if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
         {
-            return _latitude;
+            return new NullPosition();
         }
 
-        public override string GetLongitude()
-        {
-            return _longitude;
-        }
+        string tempLatitude = LimitToFourDecimalPlaces(lattitude);
+        string tempLongitude = LimitToFourDecimalPlaces(longitude);
 
-        public override string GetAltitude()
+        if (IsValidLatitude(tempLatitude) && IsValidLongitude(tempLongitude))
         {
-            return _altitude;
-        }
-
-        public static bool IsValidLatitude(string latitude)
-        {
-            if (string.IsNullOrWhiteSpace(latitude))
+            return new Position
             {
-                return false;
-            }
-
-            return
-            (
-                -90.0 <= double.Parse(latitude)
-                && double.Parse(latitude) <= 90.0
-            );
+                _latitude = tempLatitude,
+                _longitude = tempLongitude
+            };
         }
-
-        public static bool IsValidLongitude(string longitude)
+        else
         {
-            if (string.IsNullOrWhiteSpace(longitude))
-            {
-                return false;
-            }
-
-            return
-            (
-                -180.0 <= double.Parse(longitude)
-                && double.Parse(longitude) <= 180.0
-            );
+            return new NullPosition();
         }
+    }
 
-        public static PositionBase Create(string? lattitude, string? longitude)
+    public static string LimitToFourDecimalPlaces(string coordinate)
+    {
+        string coord = coordinate.Trim();
+        string[] coordinateParts = coord.Split('.');
+        if (coordinateParts[1].Length > 4)
         {
-            if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
-            {
-                return new NullPosition();
-            }
-
-            string tempLatitude = LimitToFourDecimalPlaces(lattitude);
-            string tempLongitude = LimitToFourDecimalPlaces(longitude);
-
-            if (IsValidLatitude(tempLatitude) && IsValidLongitude(tempLongitude))
-            {
-                return new Position
-                {
-                    _latitude = tempLatitude,
-                    _longitude = tempLongitude
-                };
-            }
-            else
-            {
-                return new NullPosition();
-            }
+            return $"{coordinateParts[0]}.{coordinateParts[1].Substring(0, 4)}";
         }
-
-        public static string LimitToFourDecimalPlaces(string coordinate)
+        else
         {
-            string coord = coordinate.Trim();
-            string[] coordinateParts = coord.Split('.');
-            if (coordinateParts[1].Length > 4)
-            {
-                return $"{coordinateParts[0]}.{coordinateParts[1].Substring(0, 4)}";
-            }
-            else
-            {
-                return coord;
-            }
+            return coord;
         }
+    }
 
-        public override string ToString()
-        {
-            return $"{_latitude},{_longitude}";
-        }
+    public override string ToString()
+    {
+        return $"{_latitude},{_longitude}";
     }
 }
