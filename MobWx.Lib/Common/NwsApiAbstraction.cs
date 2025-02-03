@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using MobWx.Lib.Models;
 using System.Text.Json;
+using MobWx.Lib.Models.Base;
+using System.Text.Json.Serialization;
 
 namespace MobWx.Lib.Common
 {
@@ -112,8 +114,10 @@ namespace MobWx.Lib.Common
                     continue;
                 }
 
-                var httpClient = _httpClientFactory.CreateClient("NwsElementUrl");
-                var request = new HttpRequestMessage(HttpMethod.Get, LatestObsPath(obsStnUrl));
+                string obsStationId = obsStnUrl.Split('/').Last();
+                _logger.LogInformation("Selected station with element: {stnpath} and station ID {stnid}", obsStnUrl, obsStationId);
+                var httpClient = _httpClientFactory.CreateClient("NwsApi"); // base: https://api.weather.gov
+                var request = new HttpRequestMessage(HttpMethod.Get, LatestObsPath(obsStationId)); // req uri: /stations/{stationId}/observations/latest
                 var response = await httpClient.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
@@ -123,13 +127,17 @@ namespace MobWx.Lib.Common
                     try
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
+                        _logger.LogInformation("Response Content JSON string is: {jsonstring}", jsonString);
 
                         var options = new JsonSerializerOptions
                         {
-                            PropertyNameCaseInsensitive = true
+                            PropertyNameCaseInsensitive = true,
+                            Converters = { new JsonStringEnumConverter() }
                         };
 
                         Observation? observation = JsonSerializer.Deserialize<Observation>(jsonString, options);
+                        _logger.LogInformation("JsonSerializer deserialized jsonString to an observation instance.");
+                        _logger.LogInformation(jsonString);
 
                         if (observation is not null)
                         {
