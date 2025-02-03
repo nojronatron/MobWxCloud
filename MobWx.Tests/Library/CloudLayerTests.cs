@@ -1,5 +1,5 @@
+using MobWx.Lib.Enumerations;
 using MobWx.Lib.Models;
-using Xunit;
 
 namespace MobWx.Tests.Library;
 
@@ -9,26 +9,29 @@ public class CloudLayerTests
     public void CloudLayer_DefaultValues_ShouldReturnExpectedValues()
     {
         // Arrange
-        var cloudLayer = new CloudLayer();
+        var nullCloudLayer = new CloudLayer();
 
-        // Act & Assert
-        Assert.Equal(Measurement.ZeroValue, cloudLayer.Base);
-        Assert.Equal(Amount.OVC, cloudLayer.Amount); // Default enum value is the first one
-    }
-
-    [Fact]
-    public void CloudLayer_SetValues_ShouldReturnExpectedValues()
-    {
-        // Arrange
-        var measurement = new Measurement { Value = 1000, UnitCode = "wmoUnit:m" };
-        var cloudLayer = new CloudLayer
+        var noCloudLayer = new CloudLayer()
         {
-            Base = measurement,
-            Amount = Amount.SCT
+            Amount = Amount.CLR
+        };
+
+        var ovcCloudLayer = new CloudLayer()
+        {
+            Amount = Amount.OVC,
+            CloudBase = new MeasurementInt { Value = 2740, UnitCode = "wmoUnit:m" }
         };
 
         // Act & Assert
-        Assert.Equal(measurement, cloudLayer.Base);
-        Assert.Equal(Amount.SCT, cloudLayer.Amount);
+        Assert.Null(nullCloudLayer.CloudBase);
+
+        Assert.NotNull(noCloudLayer);
+        Assert.Null(noCloudLayer.CloudBase);
+        Assert.Equal(Amount.CLR, noCloudLayer.Amount);
+
+        Assert.NotNull(ovcCloudLayer);
+        Assert.NotNull(ovcCloudLayer.CloudBase);
+        Assert.Equal(Amount.OVC, ovcCloudLayer.Amount);
     }
+
 }
