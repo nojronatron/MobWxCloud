@@ -4,16 +4,16 @@ using System.Text.Json.Serialization;
 namespace MobWx.Lib.Models;
 
 /// <summary>
-/// Use this class to represent an NWS API measurement instance with a Double value type.
+/// Use this class to represent an NWS API measurement instance with a 32-bit Integer value type.
 /// </summary>
-public class Measurement : MeasurementBase
+public class MeasurementInt : MeasurementBase
 {
     [JsonPropertyName("value")]
-    public double? Value { get; set; }
+    public int? Value { get; set; }
 
-    public static Measurement ZeroValue => new() { Value = 0.0d };
+    public static MeasurementInt ZeroValue => new() { Value = 0 };
 
-    public static Measurement MinValue => new() { Value = double.MinValue };
+    public static MeasurementInt MinValue => new() { Value = int.MinValue };
 
     public bool HasNullValue => Value is null;
 
