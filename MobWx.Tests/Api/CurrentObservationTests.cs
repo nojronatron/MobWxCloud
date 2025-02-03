@@ -1,8 +1,6 @@
 using MobWx.Lib.Models;
 using MobWx.API.Models;
-using System;
-using System.Collections.Generic;
-using Xunit;
+using MobWx.Lib.Enumerations;
 
 namespace MobWx.Tests.Api;
 
@@ -19,23 +17,23 @@ public class CurrentObservationTests
             RawMessage = "Test raw message",
             TextDescription = "Cloudy",
             Icon = "http://example.com/icon.png",
-            Temperature = new Measurement { Value = 7.8, UnitCode = "wmoUnit:degC" },
-            Dewpoint = new Measurement { Value = -5, UnitCode = "wmoUnit:degC" },
-            WindDirection = new Measurement { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
-            WindSpeed = new Measurement { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
-            WindGust = new Measurement { Value = null, UnitCode = "wmoUnit:km_h-1" },
-            BarometricPressureMb = new Measurement { Value = 101860, UnitCode = "wmoUnit:Pa" },
-            Visibility = new Measurement { Value = 16090, UnitCode = "wmoUnit:m" },
-            MaxTemperatureLast24Hours = new Measurement { Value = null, UnitCode = "wmoUnit:degC" },
-            MinTemperatureLast24Hours = new Measurement { Value = null, UnitCode = "wmoUnit:degC" },
-            PrecipitationLastHour = new Measurement { Value = null, UnitCode = "wmoUnit:mm" },
-            WindChill = new Measurement { Value = 4.8, UnitCode = "wmoUnit:degC" },
-            HeatIndex = new Measurement { Value = null, UnitCode = "wmoUnit:degC" },
+            Temperature = new Temperature { Value = 7.8, UnitCode = "wmoUnit:degC" },
+            Dewpoint = new Dewpoint { Value = -5, UnitCode = "wmoUnit:degC" },
+            WindDirection = new WindDirection { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
+            WindSpeed = new WindSpeed { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
+            WindGust = new WindGust { Value = null, UnitCode = "wmoUnit:km_h-1" },
+            BarometricPressureMb = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
+            Visibility = new Visibility { Value = 16090, UnitCode = "wmoUnit:m" },
+            MaxTemperatureLast24Hours = new MaxTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
+            MinTemperatureLast24Hours = new MinTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
+            PrecipitationLastHour = new PrecipitationLastHour { Value = null, UnitCode = "wmoUnit:mm" },
+            WindChill = new WindChill { Value = 4.8, UnitCode = "wmoUnit:degC" },
+            HeatIndex = new HeatIndex { Value = null, UnitCode = "wmoUnit:degC" },
             CloudLayers = new List<CloudLayer>
             {
                 new CloudLayer
                 {
-                    Base = new Measurement { Value = 2740, UnitCode = "wmoUnit:m" },
+                    CloudBase = new MeasurementInt { Value = 2740, UnitCode = "wmoUnit:m" },
                     Amount = Amount.OVC
                 }
             }
@@ -60,8 +58,9 @@ public class CurrentObservationTests
         Assert.Equal(11, currentObservation.WindSpeedMph);
         Assert.Null(currentObservation.WindGustKph);
         Assert.Null(currentObservation.WindGustMph);
+        Assert.NotNull(currentObservation.PressureMb);
         Assert.Equal(101860, currentObservation.PressureMb);
-        Assert.Equal(3007.92, Math.Round((double)currentObservation.PressureIn, 2));
+        Assert.Equal(3007.92, Math.Round((double)currentObservation.PressureIn!, 2));
         Assert.Equal(16090, currentObservation.VisibilityMeters);
         Assert.Equal(10, currentObservation.VisibilityMiles);
         Assert.Null(currentObservation.MaxTemperatureC);
@@ -77,8 +76,8 @@ public class CurrentObservationTests
         Assert.NotNull(currentObservation.CloudLayers);
         Assert.Single(currentObservation.CloudLayers);
         Assert.NotNull(currentObservation.CloudLayers[0]);
-        Assert.NotNull(currentObservation.CloudLayers[0].Base);
-        Assert.Equal(2740, currentObservation.CloudLayers[0].Base.Value);
+        Assert.NotNull(currentObservation.CloudLayers[0].CloudBase);
+        Assert.Equal(2740, currentObservation.CloudLayers[0].CloudBase!.Value);
         Assert.Equal(Amount.OVC, currentObservation.CloudLayers[0].Amount);
     }
 
