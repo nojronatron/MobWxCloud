@@ -1,7 +1,8 @@
+using MobWx.Lib.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MobWx.Lib.Models.Helpers;
+namespace MobWx.Lib.Helpers;
 
 public class ObservationConverter : JsonConverter<Observation>
 {
