@@ -59,15 +59,40 @@ app.UseHttpsRedirection();
 // get current weather conditions from office nearest to lat, lon
 app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float lon, HttpContext httpContext) =>
 {
-    using (var scope = app.Services.CreateScope())
+    var position = Position.Create(lat.ToString(), lon.ToString());
+
+    if (position is NullPosition)
     {
-        var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
-        Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(Position.Create(lat.ToString(), lon.ToString()));
+        return Results.BadRequest("Invalid latitude (lat) or langitude (lon) values.");
+    }
 
-        // convert currentCondition into client-friendly JSON
-        CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
+    try
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
+            logger.LogInformation("Fetting current conditions for (lat, lon): ({lat}, {lon}).", lat, lon);
 
-        return Results.Ok(currentObservation);
+            Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(position);
+
+            if (currentCondition is null)
+            {
+                logger.LogWarning("No current conditions found for (lat, lon): ({lat}, {lon}).", lat, lon);
+                return Results.NotFound("No current conditions found.");
+            }
+
+            // convert currentCondition into client-friendly JSON
+            CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
+
+            return Results.Ok(currentObservation);
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while fetching current conditions for lat: {lat}, lon: {lon}", lat, lon);
+        return Results.Problem("An error occurred while processing your request.");
     }
 });
 
