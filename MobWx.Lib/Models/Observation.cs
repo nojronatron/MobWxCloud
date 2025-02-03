@@ -11,7 +11,7 @@ public partial class Observation
     public string? Location { get; set; } // note long before lat: "POINT(-123.45 67.89)"
 
     [JsonPropertyName("elevation")]
-    public Elevation? StationElevation { get; set; } // elevation of the obs station
+    public Elevation? StationElevation { get; set; } // elevation of the obs station om meters
 
     [JsonPropertyName("station")]
     public string Station { get; set; } = string.Empty; // api.weather.gov/stations/{station}
