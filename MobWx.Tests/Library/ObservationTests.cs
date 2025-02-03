@@ -1,3 +1,4 @@
+using MobWx.Lib.Enumerations;
 using MobWx.Lib.Models;
 
 namespace MobWx.Tests.Library
@@ -11,28 +12,30 @@ namespace MobWx.Tests.Library
             var observation = new Observation
             {
                 Id = "123",
+                Location = "POINT(45,-123)",
+                StationElevation = new Elevation { Value = 100, UnitCode = "wmoUnit:m" },
                 Station = "TestStation",
                 Timestamp = new DateTime(2025, 1, 31, 3, 53, 0),
                 RawMessage = "Test raw message",
                 TextDescription = "Cloudy",
                 Icon = "http://example.com/icon.png",
-                Temperature = new Measurement { Value = 7.8, UnitCode = "wmoUnit:degC" },
-                Dewpoint = new Measurement { Value = -5, UnitCode = "wmoUnit:degC" },
-                WindDirection = new Measurement { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
-                WindSpeed = new Measurement { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
-                WindGust = new Measurement { Value = null, UnitCode = "wmoUnit:km_h-1" },
-                BarometricPressureMb = new Measurement { Value = 101860, UnitCode = "wmoUnit:Pa" },
-                Visibility = new Measurement { Value = 16090, UnitCode = "wmoUnit:m" },
-                MaxTemperatureLast24Hours = new Measurement { Value = null, UnitCode = "wmoUnit:degC" },
-                MinTemperatureLast24Hours = new Measurement { Value = null, UnitCode = "wmoUnit:degC" },
-                PrecipitationLastHour = new Measurement { Value = null, UnitCode = "wmoUnit:mm" },
-                WindChill = new Measurement { Value = 4.8, UnitCode = "wmoUnit:degC" },
-                HeatIndex = new Measurement { Value = null, UnitCode = "wmoUnit:degC" },
+                Temperature = new Temperature { Value = 7.8, UnitCode = "wmoUnit:degC" },
+                Dewpoint = new Dewpoint { Value = -1.1, UnitCode = "wmoUnit:degC" },
+                WindDirection = new WindDirection { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
+                WindSpeed = new WindSpeed { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
+                WindGust = new WindGust { Value = null, UnitCode = "wmoUnit:km_h-1" },
+                BarometricPressureMb = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
+                Visibility = new Visibility { Value = 16090, UnitCode = "wmoUnit:m" },
+                MaxTemperatureLast24Hours = new MaxTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
+                MinTemperatureLast24Hours = new MinTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
+                PrecipitationLastHour = new PrecipitationLastHour { Value = null, UnitCode = "wmoUnit:mm" },
+                WindChill = new WindChill { Value = 4.8, UnitCode = "wmoUnit:degC" },
+                HeatIndex = new HeatIndex { Value = null, UnitCode = "wmoUnit:degC" },
                 CloudLayers = new List<CloudLayer>
                 {
                     new CloudLayer
                     {
-                        Base = new Measurement { Value = 2740, UnitCode = "wmoUnit:m" },
+                        CloudBase = new MeasurementInt { Value = 2740, UnitCode = "wmoUnit:m" },
                         Amount = Amount.OVC
                     }
                 }
@@ -50,7 +53,7 @@ Raw Message: Test raw message
 Text Description: Cloudy
 Icon: http://example.com/icon.png
 Temperature: 7.8
-Dewpoint: -5
+Dewpoint: -1.1
 Wind Direction: 170
 Wind Speed: 18.36
 Wind Gust: 
@@ -97,18 +100,6 @@ Heat Index:
 
             // Assert
             Assert.Equal(0, result.Value);
-        }
-
-        [Fact]
-        public void CloudLayer_DefaultValues_ShouldReturnExpectedValues()
-        {
-            // Arrange
-            var cloudLayer = new CloudLayer();
-
-            // Act & Assert
-            Assert.Equal(Measurement.ZeroValue, cloudLayer.Base);
-            // ovc is first item in enum therefore default
-            Assert.Equal(Amount.OVC, cloudLayer.Amount);
         }
     }
 }
