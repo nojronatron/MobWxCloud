@@ -1,4 +1,5 @@
 ﻿using MobWx.Lib.Models;
+using MobWx.Lib.Models.Base;
 
 namespace MobWx.Lib.Common
 {
