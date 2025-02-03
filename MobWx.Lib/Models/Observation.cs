@@ -58,6 +58,9 @@ public partial class Observation
     [JsonPropertyName("precipitationLastHour")]
     public PrecipitationLastHour? PrecipitationLastHour { get; set; }
 
+    [JsonPropertyName("relativeHumidity")]
+    public Rh? RelativeHumidity { get; set; }
+
     [JsonPropertyName("windChill")]
     public WindChill? WindChill { get; set; }
 
