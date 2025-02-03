@@ -1,4 +1,6 @@
-﻿namespace MobWx.Lib.Models
+﻿using MobWx.Lib.Models.Base;
+
+namespace MobWx.Lib.Models
 {
     public class NullPosition : PositionBase
     {
