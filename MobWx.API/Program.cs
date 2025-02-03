@@ -1,3 +1,4 @@
+using MobWx.API.Models;
 using MobWx.Lib.Common;
 using MobWx.Lib.Models;
 using System.Diagnostics;
@@ -62,7 +63,11 @@ app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float
     {
         var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
         Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(Position.Create(lat.ToString(), lon.ToString()));
-        return Results.Ok(currentCondition);
+
+        // convert currentCondition into client-friendly JSON
+        CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
+
+        return Results.Ok(currentObservation);
     }
 });
 
