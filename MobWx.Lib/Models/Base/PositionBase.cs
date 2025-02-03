@@ -1,12 +1,12 @@
-﻿namespace MobWx.Lib.Models
+﻿namespace MobWx.Lib.Models.Base
 {
     /// <summary>
-    /// Supports null Position objects.
+    /// Supports Position and NullPosition objects.
     /// </summary>
     public abstract class PositionBase
     {
         public abstract string GetLatitude();
-        public  abstract string GetLongitude();
+        public abstract string GetLongitude();
         public abstract string GetAltitude();
     }
 }

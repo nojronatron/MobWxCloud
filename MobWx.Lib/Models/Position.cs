@@ -1,4 +1,6 @@
-﻿namespace MobWx.Lib.Models;
+﻿using MobWx.Lib.Models.Base;
+
+namespace MobWx.Lib.Models;
 
 public class Position : PositionBase
 {
@@ -6,6 +8,9 @@ public class Position : PositionBase
     public string _longitude;
     public string _altitude; // optional
 
+    /// <summary>
+    /// Returns true if both latitude and longitude are null or whitespace.
+    /// </summary>
     public bool IsEmpty
     {
         get => string.IsNullOrWhiteSpace(_latitude)
@@ -34,6 +39,11 @@ public class Position : PositionBase
         return _altitude;
     }
 
+    /// <summary>
+    /// Validate a latitude string.
+    /// </summary>
+    /// <param name="latitude"></param>
+    /// <returns></returns>
     public static bool IsValidLatitude(string latitude)
     {
         if (string.IsNullOrWhiteSpace(latitude))
@@ -48,6 +58,11 @@ public class Position : PositionBase
         );
     }
 
+    /// <summary>
+    /// Validate a longitude string.
+    /// </summary>
+    /// <param name="longitude"></param>
+    /// <returns></returns>
     public static bool IsValidLongitude(string longitude)
     {
         if (string.IsNullOrWhiteSpace(longitude))
@@ -62,6 +77,14 @@ public class Position : PositionBase
         );
     }
 
+    /// <summary>
+    /// Create a Position object from a latitude and longitude.
+    /// Leverages abstract "PositionBase" class to return a Position or NullPosition
+    /// depending on nullables in input parameters.
+    /// </summary>
+    /// <param name="lattitude"></param>
+    /// <param name="longitude"></param>
+    /// <returns></returns>
     public static PositionBase Create(string? lattitude, string? longitude)
     {
         if (string.IsNullOrWhiteSpace(lattitude) || string.IsNullOrWhiteSpace(longitude))
@@ -86,6 +109,12 @@ public class Position : PositionBase
         }
     }
 
+    /// <summary>
+    /// Create a Position object from a Coordinate instance
+    /// limiting latitude and longitude to four decimal places.
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <returns></returns>
     public static string LimitToFourDecimalPlaces(string coordinate)
     {
         string coord = coordinate.Trim();
