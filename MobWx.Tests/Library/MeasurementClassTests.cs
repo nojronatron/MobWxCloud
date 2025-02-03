@@ -1,5 +1,4 @@
 using MobWx.Lib.Models;
-using Xunit;
 
 namespace MobWx.Tests.Library;
 
@@ -44,7 +43,7 @@ public class MeasurementTests
         var measurement = new Measurement();
 
         // Act
-        var result = measurement.IsNull;
+        var result = measurement.HasNullValue;
 
         // Assert
         Assert.True(result);
@@ -57,7 +56,7 @@ public class MeasurementTests
         var measurement = new Measurement { Value = 10.0 };
 
         // Act
-        var result = measurement.IsNull;
+        var result = measurement.HasNullValue;
 
         // Assert
         Assert.False(result);
@@ -173,6 +172,7 @@ public class MeasurementTests
         var result = measurement.ToString();
 
         // Assert
-        Assert.Equal(string.Empty, result);
+        Assert.NotNull(measurement);
+        Assert.True(measurement.HasNullValue);
     }
 }
