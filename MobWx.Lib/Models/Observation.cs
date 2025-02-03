@@ -1,14 +1,20 @@
-﻿namespace MobWx.Lib.Models;
+﻿using System.Text.Json.Serialization;
 
-using System.Text.Json.Serialization;
+namespace MobWx.Lib.Models;
 
 public partial class Observation
 {
     [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
 
+    [JsonPropertyName("geometry")]
+    public string? Location { get; set; } // note long before lat: "POINT(-123.45 67.89)"
+
+    [JsonPropertyName("elevation")]
+    public Elevation? StationElevation { get; set; } // elevation of the obs station
+
     [JsonPropertyName("station")]
-    public string Station { get; set; } = string.Empty;
+    public string Station { get; set; } = string.Empty; // api.weather.gov/stations/{station}
 
     [JsonPropertyName("timestamp")]
     public DateTime? Timestamp { get; set; }
@@ -20,43 +26,43 @@ public partial class Observation
     public string TextDescription { get; set; } = string.Empty;
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; } = string.Empty;
+    public string Icon { get; set; } = string.Empty; // api.weather.gov/icons/{area}/{dayNite}/{sky}?size={size}
 
     [JsonPropertyName("temperature")]
-    public Measurement? Temperature { get; set; }
+    public Temperature? Temperature { get; set; }
 
     [JsonPropertyName("dewpoint")]
-    public Measurement? Dewpoint { get; set; }
+    public Dewpoint? Dewpoint { get; set; }
 
     [JsonPropertyName("windDirection")]
-    public Measurement? WindDirection { get; set; }
+    public WindDirection? WindDirection { get; set; }
 
     [JsonPropertyName("windSpeed")]
-    public Measurement? WindSpeed { get; set; }
+    public WindSpeed? WindSpeed { get; set; }
 
     [JsonPropertyName("windGust")]
-    public Measurement? WindGust { get; set; }
+    public WindGust? WindGust { get; set; }
 
     [JsonPropertyName("barometricPressure")]
-    public Measurement? BarometricPressureMb { get; set; }
+    public BarometricPressure? BarometricPressureMb { get; set; }
 
     [JsonPropertyName("visibility")]
-    public Measurement? Visibility { get; set; }
+    public Visibility? Visibility { get; set; }
 
     [JsonPropertyName("maxTemperatureLast24Hours")]
-    public Measurement? MaxTemperatureLast24Hours { get; set; }
+    public MaxTemperatureLast24Hours? MaxTemperatureLast24Hours { get; set; }
 
     [JsonPropertyName("minTemperatureLast24Hours")]
-    public Measurement? MinTemperatureLast24Hours { get; set; }
+    public MinTemperatureLast24Hours? MinTemperatureLast24Hours { get; set; }
 
     [JsonPropertyName("precipitationLastHour")]
-    public Measurement? PrecipitationLastHour { get; set; }
+    public PrecipitationLastHour? PrecipitationLastHour { get; set; }
 
     [JsonPropertyName("windChill")]
-    public Measurement? WindChill { get; set; }
+    public WindChill? WindChill { get; set; }
 
     [JsonPropertyName("heatIndex")]
-    public Measurement? HeatIndex { get; set; }
+    public HeatIndex? HeatIndex { get; set; }
 
     [JsonPropertyName("cloudLayers")]
     public List<CloudLayer>? CloudLayers { get; set; }
