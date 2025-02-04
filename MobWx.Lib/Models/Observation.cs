@@ -44,7 +44,7 @@ public partial class Observation
     public WindGust? WindGust { get; set; }
 
     [JsonPropertyName("barometricPressure")]
-    public BarometricPressure? BarometricPressureMb { get; set; }
+    public BarometricPressure? BarometricPressureHpa { get; set; }
 
     [JsonPropertyName("visibility")]
     public Visibility? Visibility { get; set; }
