@@ -68,25 +68,23 @@ app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float
 
     try
     {
-        using (var scope = app.Services.CreateScope())
+        using IServiceScope scope = app.Services.CreateScope();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
+        logger.LogInformation("Fetting current conditions for (lat, lon): ({lat}, {lon}).", lat, lon);
+
+        Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(position);
+
+        if (currentCondition is null)
         {
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
-            logger.LogInformation("Fetting current conditions for (lat, lon): ({lat}, {lon}).", lat, lon);
-
-            Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(position);
-
-            if (currentCondition is null)
-            {
-                logger.LogWarning("No current conditions found for (lat, lon): ({lat}, {lon}).", lat, lon);
-                return Results.NotFound("No current conditions found.");
-            }
-
-            // convert currentCondition into client-friendly JSON
-            CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
-
-            return Results.Ok(currentObservation);
+            logger.LogWarning("No current conditions found for (lat, lon): ({lat}, {lon}).", lat, lon);
+            return Results.NotFound("No current conditions found.");
         }
+
+        // convert currentCondition into client-friendly JSON
+        CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
+
+        return Results.Ok(currentObservation);
     }
     catch (Exception ex)
     {
