@@ -1,6 +1,6 @@
 ﻿namespace MobWx.Lib.Models;
 
-public class Elevation : MeasurementInt
+public class Elevation : Measurement
 {
    public override string ToString()
     {

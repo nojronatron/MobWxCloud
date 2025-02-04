@@ -8,7 +8,7 @@ public partial class Observation
     public string Id { get; set; } = string.Empty;
 
     [JsonPropertyName("geometry")]
-    public string? Location { get; set; } // note long before lat: "POINT(-123.45 67.89)"
+    public string? PointLocation { get; set; } // note long before lat: "POINT(-123.45 67.89)"
 
     [JsonPropertyName("elevation")]
     public Elevation? StationElevation { get; set; } // elevation of the obs station om meters
