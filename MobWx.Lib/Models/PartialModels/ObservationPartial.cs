@@ -25,10 +25,17 @@ public partial class Observation
         result.AppendLine($"Max Temp Last 24 Hours: {MaxTemperatureLast24Hours}");
         result.AppendLine($"Min Temp Last 24 Hours: {MinTemperatureLast24Hours}");
         result.AppendLine($"Precipitation Last Hour: {PrecipitationLastHour}");
+        result.AppendLine($"Rh: {RelativeHumidity}");
         result.AppendLine($"Wind Chill: {WindChill}");
         result.AppendLine($"Heat Index: {HeatIndex}");
         
-        if (CloudLayers is not null && CloudLayers.Count > 0){
+        if (CloudLayers is not null && CloudLayers.Count > 0)
+        {
+            result.AppendLine("Cloud Layers:");
+            foreach (var cloudLayer in CloudLayers)
+            {
+                result.AppendLine($"  {cloudLayer}");
+            }
         }
 
         result.AppendLine("***** End Observation *****");
