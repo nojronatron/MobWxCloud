@@ -1,6 +1,4 @@
-﻿using MobWx.Lib.Models;
-
-namespace MobWx.API.Models;
+﻿namespace MobWx.API.Models;
 
 public partial class CurrentObservation
 {
@@ -30,9 +28,10 @@ public partial class CurrentObservation
     public int? MinTemperatureF { get; set; } // 24hr period
     public int? PrecipitationMmHr { get; set; } // 1hr period
     public double? PrecipitationInchHr { get; set; } // 1hr period
+    public int? RelativeHumidity { get; set; } // percentage
     public double? WindChillC { get; set; }
     public int? WindChillF { get; set; }
     public double? HeatIndexC { get; set; }
     public int? HeatIndexF { get; set; }
-    public List<CloudLayer>? CloudLayers { get; set; }
+    public List<SimpleCloudLayer>? CloudLayers { get; set; }
 }

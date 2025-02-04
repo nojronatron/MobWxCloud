@@ -15,8 +15,8 @@ public class CloudLayer
     {
         string result = string.Empty;
         result += Amount is null
-            ? "unk" 
-            : Amount.ToString();
+            ? "unk"
+            : ((Amount).ToString());
         result += ", ";
         result += CloudBase is null
             ? "unk"

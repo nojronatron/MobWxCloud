@@ -78,9 +78,11 @@ public class CurrentObservationTests
         Assert.NotNull(currentObservation.CloudLayers);
         Assert.Single(currentObservation.CloudLayers);
         Assert.NotNull(currentObservation.CloudLayers[0]);
-        Assert.NotNull(currentObservation.CloudLayers[0].CloudBase);
-        Assert.Equal(2740, currentObservation.CloudLayers[0].CloudBase!.Value);
-        Assert.Equal(Amount.OVC, currentObservation.CloudLayers[0].Amount);
+        Assert.NotNull(currentObservation.CloudLayers[0].Description);
+        Assert.Equal("OVC", currentObservation.CloudLayers[0].Description);
+        Assert.NotNull(currentObservation.CloudLayers[0].HeightMeters);
+        Assert.Equal("2740", currentObservation.CloudLayers[0].HeightMeters);
+        Assert.Equal("8990", currentObservation.CloudLayers[0].HeightFeet);
     }
 
     [Theory]

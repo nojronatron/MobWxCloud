@@ -1,5 +1,6 @@
 using MobWx.Lib.Enumerations;
 using MobWx.Lib.Models;
+using System.Diagnostics;
 
 namespace MobWx.Tests.Library;
 
@@ -27,11 +28,14 @@ public class CloudLayerTests
 
         Assert.NotNull(noCloudLayer);
         Assert.Null(noCloudLayer.CloudBase);
+        Assert.NotNull(noCloudLayer.Amount);
+        Debug.WriteLine($"CloudLayerTest: No cloud layer amount: {noCloudLayer.Amount}");
         Assert.Equal(Amount.CLR, noCloudLayer.Amount);
 
         Assert.NotNull(ovcCloudLayer);
         Assert.NotNull(ovcCloudLayer.CloudBase);
+        Assert.NotNull(ovcCloudLayer.Amount);
+        Debug.WriteLine($"CloudLayerTest: Overcast layer amount: {ovcCloudLayer.Amount}");
         Assert.Equal(Amount.OVC, ovcCloudLayer.Amount);
     }
-
 }

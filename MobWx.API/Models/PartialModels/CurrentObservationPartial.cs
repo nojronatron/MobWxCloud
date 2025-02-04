@@ -66,8 +66,30 @@ public partial class CurrentObservation
             ? UnitConverter.ToFarenheit(heatIndexC.Value)
             : null;
 
+        List<SimpleCloudLayer> SimpleCloudLayers = [];
+
+        if (observation.CloudLayers is not null && observation.CloudLayers.Count > 0)
+        {
+            foreach (var cloudLayer in observation.CloudLayers)
+            {
+                if (cloudLayer.Amount is not null && cloudLayer.Amount.HasValue)
+                {
+                    string clAmount = cloudLayer.Amount.ToString() ?? string.Empty;
+
+                    SimpleCloudLayers
+                        .Add(new SimpleCloudLayer
+                        {
+                            HeightMeters = cloudLayer.CloudBase?.ToString() ?? null,
+                            Description = clAmount
+                        });
+                }
+            }
+        }
+
         return new CurrentObservation
         {
+            Location = observation.PointLocation,
+            StationElevation = observation.StationElevation?.ToNullableDouble(),
             Station = observation.Station ?? string.Empty,
             Timestamp = observation.Timestamp ?? DateTime.MinValue,
             RawMessage = observation.RawMessage ?? string.Empty,
@@ -92,11 +114,12 @@ public partial class CurrentObservation
             MinTemperatureF = minTemperatureF,
             PrecipitationMmHr = precipitationMmHr,
             PrecipitationInchHr = precipitationInchesHour,
+            RelativeHumidity = observation.RelativeHumidity?.ToNullableInt(),
             WindChillC = windChillC,
             WindChillF = windChillF,
             HeatIndexC = heatIndexC,
             HeatIndexF = heatIndexF,
-            CloudLayers = observation.CloudLayers
+            CloudLayers = SimpleCloudLayers
         };
     }
 }
