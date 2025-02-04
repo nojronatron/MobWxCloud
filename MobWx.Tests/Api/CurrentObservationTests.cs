@@ -1,6 +1,7 @@
 using MobWx.Lib.Models;
 using MobWx.API.Models;
 using MobWx.Lib.Enumerations;
+using MobWx.Lib.Helpers;
 
 namespace MobWx.Tests.Api;
 
@@ -22,21 +23,21 @@ public class CurrentObservationTests
             WindDirection = new WindDirection { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
             WindSpeed = new WindSpeed { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
             WindGust = new WindGust { Value = null, UnitCode = "wmoUnit:km_h-1" },
-            BarometricPressureMb = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
+            BarometricPressureHpa = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
             Visibility = new Visibility { Value = 16090, UnitCode = "wmoUnit:m" },
             MaxTemperatureLast24Hours = new MaxTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
             MinTemperatureLast24Hours = new MinTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
             PrecipitationLastHour = new PrecipitationLastHour { Value = null, UnitCode = "wmoUnit:mm" },
             WindChill = new WindChill { Value = 4.8, UnitCode = "wmoUnit:degC" },
             HeatIndex = new HeatIndex { Value = null, UnitCode = "wmoUnit:degC" },
-            CloudLayers = new List<CloudLayer>
-            {
+            CloudLayers =
+            [
                 new CloudLayer
                 {
                     CloudBase = new MeasurementInt { Value = 2740, UnitCode = "wmoUnit:m" },
                     Amount = Amount.OVC
                 }
-            }
+            ]
         };
 
         // Act
@@ -59,8 +60,9 @@ public class CurrentObservationTests
         Assert.Null(currentObservation.WindGustKph);
         Assert.Null(currentObservation.WindGustMph);
         Assert.NotNull(currentObservation.PressureMb);
-        Assert.Equal(101860, currentObservation.PressureMb);
-        Assert.Equal(3007.92, Math.Round((double)currentObservation.PressureIn!, 2));
+        Assert.Equal(1018.6, currentObservation.PressureMb);
+        Assert.NotNull(currentObservation.PressureIn);
+        Assert.Equal(30.08, currentObservation.PressureIn);
         Assert.Equal(16090, currentObservation.VisibilityMeters);
         Assert.Equal(10, currentObservation.VisibilityMiles);
         Assert.Null(currentObservation.MaxTemperatureC);
@@ -88,7 +90,7 @@ public class CurrentObservationTests
     public void ToFarenheit_ShouldConvertCelsiusToFarenheit(double celsius, int expectedFarenheit)
     {
         // Act
-        var result = CurrentObservation.ToFarenheit(celsius);
+        var result = UnitConverter.ToFarenheit(celsius);
 
         // Assert
         Assert.Equal(expectedFarenheit, result);
@@ -105,7 +107,7 @@ public class CurrentObservationTests
     public void ToMiles_ShouldConvertKilometersToMiles(int kilometers, int expectedMiles)
     {
         // Act
-        var result = CurrentObservation.ToVisibleMiles(kilometers);
+        var result = UnitConverter.ToVisibleMiles(kilometers);
 
         // Assert
         Assert.Equal(expectedMiles, result);
@@ -118,35 +120,42 @@ public class CurrentObservationTests
     public void ToMilesPerHour_ShouldConvertKilometersPerHourToMilesPerHour(int kilometersPerHour, int expectedMilesPerHour)
     {
         // Act
-        var result = CurrentObservation.ToMilesPerHour(kilometersPerHour);
+        var result = UnitConverter.ToMilesPerHour(kilometersPerHour);
 
         // Assert
         Assert.Equal(expectedMilesPerHour, result);
     }
 
     [Theory]
-    [InlineData(1013.25, 29.92)]
-    [InlineData(1000, 29.53)]
-    public void ToInchesMercury_ShouldConvertMillibarsToInchesMercury(double millibars, double expectedInchesMercury)
+    [InlineData(87000, 25.69)]
+    [InlineData(99000, 29.23)]
+    [InlineData(100680, 29.73)]
+    [InlineData(100730, 29.75)]
+    [InlineData(102000, 30.12)]
+    [InlineData(108480, 32.03)]
+    public void ToInchesMercury_ShouldConvertPascalsToInchesMercury(int pascals, double expectedInchesMercury)
     {
         // Act
-        var result = CurrentObservation.ToInchesMercury(millibars);
+        var result = UnitConverter.ToInchesMercury(pascals);
 
         // Assert
-        Assert.Equal(expectedInchesMercury, result, 2);
+        Assert.Equal(expectedInchesMercury, result); // rounding is done by the method under test
     }
 
     [Theory]
-    [InlineData(29.92, 1013.3)]
-    [InlineData(29.53, 1000)]
-    public void ToMillibars_ShouldConvertInchesMercuryToMillibars(double inchesMercury, double expectedMillibars)
+    [InlineData(87000, 870.0)]
+    [InlineData(99000, 990.0)]
+    [InlineData(100680, 1006.8)]
+    [InlineData(100730, 1007.3)]
+    [InlineData(102000, 1020.0)]
+    [InlineData(108480, 1084.8)]
+    public void ToMillibars_ShouldConvertPascalsToMillibars(int pascals, double expectedMillibars)
     {
         // Act
-        var result = CurrentObservation.ToMillibars(inchesMercury);
+        var result = UnitConverter.ToMillibars(pascals);
 
         // Assert
-        //Assert.Equal(expectedMillibars, result, 1);
-        Assert.InRange(expectedMillibars, result - 0.5, result + 0.5);
+        Assert.Equal(expectedMillibars, result); // rounding is done by the method under test
     }
 
     [Theory]
@@ -156,7 +165,7 @@ public class CurrentObservationTests
     public void ToInches_ShouldConvertMillimetersToInches(int millimeters, int expectedInches)
     {
         // Act
-        var result = CurrentObservation.ToInchesPrecip(millimeters);
+        var result = UnitConverter.ToInchesPrecip(millimeters);
 
         // Assert
         Assert.Equal(expectedInches, result);
@@ -169,7 +178,7 @@ public class CurrentObservationTests
     public void ToFeet_ShouldConvertMetersToFeet(int meters, int expectedFeet)
     {
         // Act
-        var result = CurrentObservation.ToFeet(meters);
+        var result = UnitConverter.ToFeet(meters);
 
         // Assert
         Assert.Equal(expectedFeet, result);

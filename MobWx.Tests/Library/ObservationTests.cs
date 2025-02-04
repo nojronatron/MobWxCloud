@@ -24,7 +24,7 @@ namespace MobWx.Tests.Library
                 WindDirection = new WindDirection { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
                 WindSpeed = new WindSpeed { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
                 WindGust = new WindGust { Value = null, UnitCode = "wmoUnit:km_h-1" },
-                BarometricPressureMb = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
+                BarometricPressureHpa = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
                 Visibility = new Visibility { Value = 16090, UnitCode = "wmoUnit:m" },
                 MaxTemperatureLast24Hours = new MaxTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
                 MinTemperatureLast24Hours = new MinTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },

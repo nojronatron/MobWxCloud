@@ -1,5 +1,4 @@
 using MobWx.Lib.Models;
-using Xunit;
 
 namespace MobWx.Tests.Library.MeasurementInheritors;
 
@@ -35,13 +34,13 @@ public class MaxTemperatureLast24HoursTests
     public void MaxTemperatureLast24Hours_ToString_UnitCodeIsNullOrWhitespace_SetsUnitCodeToNull()
     {
         // Arrange
-        var maxTemp = new MaxTemperatureLast24Hours { Value = 25.6789, UnitCode = null };
+        var maxTemp = new MaxTemperatureLast24Hours { Value = 25.6789 };
 
         // Act
         var result = maxTemp.ToString();
 
         // Assert
         Assert.Equal("25.68", result);
-        Assert.Equal(":null", maxTemp.UnitCode);
+        Assert.Empty(maxTemp.UnitCode);
     }
 }
