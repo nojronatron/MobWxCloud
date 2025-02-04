@@ -83,7 +83,7 @@ app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float
 
         // convert currentCondition into client-friendly JSON
         CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
-
+        logger.LogInformation("Returning current observation to web requestor with timestamp {currObsTimestamp}", currentObservation.Timestamp);
         return Results.Ok(currentObservation);
     }
     catch (Exception ex)
