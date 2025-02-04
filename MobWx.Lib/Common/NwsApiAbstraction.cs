@@ -150,7 +150,7 @@ namespace MobWx.Lib.Common
                     }
                     catch (JsonException ex)
                     {
-                        _logger.LogDebug("JSON Deserialization error: {message}", ex.Message);
+                        _logger.LogError("JSON Deserialization error: {message}, {jsonpath}, {stacktrace}", ex.Message, ex.Path, ex.StackTrace);
                         _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
                     }
                 }
