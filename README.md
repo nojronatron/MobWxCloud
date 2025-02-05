@@ -17,6 +17,13 @@ Components:
 
 This project is under development, with a goal of deploying to Azure by June 2025.
 
+### Features
+
+(incomplete list while in early development)
+
+- Capture current weather conditions from NWS API and convert for MobWx client consumption.
+- Leverage .NET Aspire v9.0 for dev time productivity and debugging.
+
 ## Releases
 
 - 0.0.1-SNAPSHOT: Initial version
