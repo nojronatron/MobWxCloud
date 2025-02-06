@@ -1,6 +1,8 @@
+using MobWx.API.Endpoints;
 using MobWx.API.Models;
 using MobWx.Lib.Common;
 using MobWx.Lib.Models;
+using MobWx.Lib.Models.Base;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +26,7 @@ builder.Services.AddHttpClient("NwsApi", config =>
     config.BaseAddress = new Uri(httpClientBaseUrl);
     config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
     config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
-    config.Timeout = TimeSpan.FromSeconds(int.Parse(httpCtsTimeout));
+    config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
 });
 
 // fetch data from extracted NWS urls
@@ -32,7 +34,7 @@ builder.Services.AddHttpClient("NwsElementUrl", config =>
 {
     config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
     config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
-    config.Timeout = TimeSpan.FromSeconds(int.Parse(httpCtsTimeout));
+    config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
 });
 
 builder.Services.AddTransient<INwsApiAbstraction, NwsApiAbstraction>();
@@ -59,7 +61,7 @@ app.UseHttpsRedirection();
 // get current weather conditions from office nearest to lat, lon
 app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float lon, HttpContext httpContext) =>
 {
-    var position = Position.Create(lat.ToString(), lon.ToString());
+    var position = PositionBase.Create(lat.ToString(), lon.ToString());
 
     if (position is NullPosition)
     {
@@ -71,7 +73,7 @@ app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float
         using IServiceScope scope = app.Services.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
-        logger.LogInformation("Fetting current conditions for (lat, lon): ({lat}, {lon}).", lat, lon);
+        logger.LogInformation("Fetching current conditions for (lat, lon): ({lat}, {lon}).", lat, lon);
 
         Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(position);
 
@@ -92,19 +94,19 @@ app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float
         logger.LogError(ex, "An error occurred while fetching current conditions for lat: {lat}, lon: {lon}", lat, lon);
         return Results.Problem("An error occurred while processing your request.");
     }
-});
+}).WithName("Conditions");
 
 // get 7-day forecast from office nearest to lat, lon
 app.MapGet("/api/v1/forecast/{lat:float},{lon:float}", (HttpRequest request) =>
 {
 
-});
+}).WithName("Forecast");
 
 // get alert(s) in the current zone given lat, lon
-app.MapGet("/api/v1/alerts/{lat:float},{lon:float}", (HttpRequest request) =>
+app.MapGet("/api/v1/alerts/{lat:float},{lon:float}", async (float lat, float lon) =>
 {
-
-});
+    return await AlertsHandlers.GetActiveAlertsAsync(lat, lon, app);
+}).WithName("Alerts");
 
 app.MapGet("/health", () =>
 {
