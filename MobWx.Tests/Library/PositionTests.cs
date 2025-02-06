@@ -90,16 +90,17 @@ public class PositionTests
     }
 
     [Fact]
-    public void ToString_NullPosition_ReturnsInvalidPositionString()
+    public void ToString_NullPosition_ReturnsEmptyString()
     {
         // Arrange
+        string expected = string.Empty;
         NullPosition nullPosition = new NullPosition();
 
         // Act
         string result = nullPosition.ToString();
 
         // Assert
-        Assert.Equal("Invalid Position", result);
+        Assert.Equal(expected, result);
     }
 
     [Fact]
