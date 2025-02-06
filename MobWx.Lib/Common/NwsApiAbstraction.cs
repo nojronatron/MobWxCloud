@@ -135,7 +135,7 @@ namespace MobWx.Lib.Common
                         _logger.LogInformation("Response Content JSON string is: {jsonstring}", jsonString);
 
                         Observation? observation = JsonSerializer.Deserialize<Observation>(jsonString, _jsonOptions);
-                        _logger.LogInformation("JsonSerializer deserialized jsonString to an observation instance: {jsonstring}", jsonString);
+                        _logger.LogInformation("JsonSerializer deserialized jsonString to an observation instance.");
 
                         if (observation is not null)
                         {

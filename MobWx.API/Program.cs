@@ -97,9 +97,9 @@ app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float
 }).WithName("Conditions");
 
 // get 7-day forecast from office nearest to lat, lon
-app.MapGet("/api/v1/forecast/{lat:float},{lon:float}", (HttpRequest request) =>
+app.MapGet("/api/v1/forecast/{lat:float},{lon:float}", async (float lat, float lon) =>
 {
-
+    return await ForecastsHandler.GetForecastsAsync(lat, lon, app);
 }).WithName("Forecast");
 
 // get alert(s) in the current zone given lat, lon
