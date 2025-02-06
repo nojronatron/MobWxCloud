@@ -1,4 +1,4 @@
-using MobWx.Lib.Enumerations;
+using MobWx.Lib.Enums;
 using Xunit;
 
 namespace MobWx.Tests.Library;
