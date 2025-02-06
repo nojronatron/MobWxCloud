@@ -1,22 +1,15 @@
 ﻿using MobWx.Lib.Models.Base;
 
-namespace MobWx.Lib.Models
+namespace MobWx.Lib.Models;
+
+public class NullPosition : PositionBase
 {
-    public class NullPosition : PositionBase
+    public NullPosition() : base(string.Empty, string.Empty)
     {
-        public override string GetAltitude()
-        {
-            throw new NotImplementedException();
-        }
+    }
 
-        public override string GetLatitude()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetLongitude()
-        {
-            throw new NotImplementedException();
-        }
+    public override string ToString()
+    {
+        return string.Empty;
     }
 }

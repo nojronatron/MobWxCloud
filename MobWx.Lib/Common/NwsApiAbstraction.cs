@@ -10,6 +10,11 @@ namespace MobWx.Lib.Common
     {
         private ILogger<NwsApiAbstraction> _logger;
         private IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
 
         public NwsApiAbstraction(ILogger<NwsApiAbstraction> logger, IHttpClientFactory httpClientFactory)
         {
@@ -53,7 +58,7 @@ namespace MobWx.Lib.Common
             }
             else
             {
-                return $"/points/{latLon.GetLatitude()},{latLon.GetLongitude()}";
+                return $"/points/{latLon.Latitude},{latLon.Longitude}";
             }
         }
 
@@ -129,15 +134,8 @@ namespace MobWx.Lib.Common
                         var jsonString = await response.Content.ReadAsStringAsync();
                         _logger.LogInformation("Response Content JSON string is: {jsonstring}", jsonString);
 
-                        var options = new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                            Converters = { new JsonStringEnumConverter() }
-                        };
-
-                        Observation? observation = JsonSerializer.Deserialize<Observation>(jsonString, options);
-                        _logger.LogInformation("JsonSerializer deserialized jsonString to an observation instance.");
-                        _logger.LogInformation(jsonString);
+                        Observation? observation = JsonSerializer.Deserialize<Observation>(jsonString, _jsonOptions);
+                        _logger.LogInformation("JsonSerializer deserialized jsonString to an observation instance: {jsonstring}", jsonString);
 
                         if (observation is not null)
                         {
@@ -182,8 +180,8 @@ namespace MobWx.Lib.Common
             }
             catch (JsonException ex)
             {
-                _logger.LogDebug($"Failed to parse observation stations from array of URLs: {ex.Message}");
-                _logger.LogError($"Unable to process data from the NWS NOAA API. Try again later.");
+                _logger.LogDebug("Failed to parse observation stations from array of URLs: {exmessage}", ex.Message);
+                _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             }
 
             _logger.LogDebug("Returning an empty Enumerable string.");
@@ -206,8 +204,8 @@ namespace MobWx.Lib.Common
                 return await response.Content.ReadAsStringAsync();
             }
 
-            _logger.LogDebug($"Failed to get observation stations from {url}");
-            _logger.LogError($"Unable to process data from the NWS NOAA API. Try again later.");
+            _logger.LogDebug("Failed to get observation stations from {url}", url);
+            _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             return string.Empty;
         }
 
@@ -228,8 +226,8 @@ namespace MobWx.Lib.Common
             }
             catch (JsonException ex)
             {
-                _logger.LogDebug($"Failed to parse observation stations from points: {ex.Message}");
-                _logger.LogError($"Unable to process data from the NWS NOAA API. Try again later.");
+                _logger.LogDebug("Failed to parse observation stations from points: {exmessage}", ex.Message);
+                _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             }
 
             _logger.LogDebug("Returning an empty string.");
@@ -252,8 +250,8 @@ namespace MobWx.Lib.Common
                 return await response.Content.ReadAsStringAsync();
             }
 
-            _logger.LogDebug($"Failed to get point data for {position.GetLatitude()}, {position.GetLongitude()}");
-            _logger.LogError($"Unable to process data from the NWS NOAA API. Try again later.");
+            _logger.LogDebug("Failed to get point data for {positionlongitude}, {positionlongitude}", position.Longitude, position.Longitude);
+            _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             return string.Empty;
         }
     }

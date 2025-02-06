@@ -1,7 +1,7 @@
 using MobWx.Lib.Models;
 using MobWx.API.Models;
-using MobWx.Lib.Enumerations;
 using MobWx.Lib.Helpers;
+using MobWx.Lib.Enums;
 
 namespace MobWx.Tests.Api;
 
