@@ -21,8 +21,9 @@ This project is under development, with a goal of deploying to Azure by June 202
 
 (incomplete list while in early development)
 
-- Capture current weather conditions from NWS API and convert for MobWx client consumption.
-- Capture active alerts from NWS API and convert for MobWx client consumption.
+- Fetch current weather conditions from NWS API and convert for MobWx client consumption.
+- Fetch active alerts from NWS API and convert for MobWx client consumption.
+- Fetch forecast data from NWS API and convert for MobWx client consumption.
 - Leverage .NET Aspire v9.0 for dev time productivity and debugging.
 
 ## Releases
