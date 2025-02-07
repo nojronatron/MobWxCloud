@@ -1,10 +1,9 @@
-using MobWx.Lib.Common;
+using MobWx.API.Common;
 using MobWx.Lib.Models;
-using Xunit;
 
 namespace MobWx.Tests.Library;
 
-public class NwsApiAbstractionTests
+public class NwsEndpointPathsTests
 {
     [Theory]
     [InlineData("gridId", "10", "20", "/gridpoints/GRIDID/10,20/stations")]
@@ -12,7 +11,7 @@ public class NwsApiAbstractionTests
     public void FoRelativePath_ShouldReturnExpectedPath(string gridId, string gridX, string gridY, string expected)
     {
         // Act
-        var result = NwsApiAbstraction.FoRelativePath(gridId, gridX, gridY);
+        var result = NwsEndpointPaths.FoRelativePath(gridId, gridX, gridY);
 
         // Assert
         Assert.Equal(expected, result);
@@ -24,7 +23,7 @@ public class NwsApiAbstractionTests
     public void LatestObsPath_ShouldReturnExpectedPath(string stationId, string expected)
     {
         // Act
-        var result = NwsApiAbstraction.LatestObsPath(stationId);
+        var result = NwsEndpointPaths.LatestObsPath(stationId);
 
         // Assert
         Assert.Equal(expected, result);
@@ -39,7 +38,7 @@ public class NwsApiAbstractionTests
         var position = Position.Create(latitude, longitude);
 
         // Act
-        var result = NwsApiAbstraction.PointPath(position);
+        var result = NwsEndpointPaths.PointPath(position);
 
         // Assert
         Assert.Equal(expected, result);
@@ -52,7 +51,7 @@ public class NwsApiAbstractionTests
         var position = Position.Create(null, null);
 
         // Act
-        var result = NwsApiAbstraction.PointPath(position);
+        var result = NwsEndpointPaths.PointPath(position);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -65,7 +64,7 @@ public class NwsApiAbstractionTests
         var position = Position.Create(string.Empty, string.Empty);
 
         // Act
-        var result = NwsApiAbstraction.PointPath(position);
+        var result = NwsEndpointPaths.PointPath(position);
 
         // Assert
         Assert.Equal(string.Empty, result);
