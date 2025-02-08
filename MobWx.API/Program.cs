@@ -70,10 +70,10 @@ app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}",
 }).WithName("Conditions");
 
 // get 7-day forecast from office nearest to lat, lon
-app.MapGet("/api/v1/forecast/{latitude:float},{longitude:float}",
+app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
     async (
-        [FromRoute]float latitude, 
-        [FromRoute]float longitude,
+        [FromRoute]double latitude, 
+        [FromRoute]double longitude,
         [FromServices] IForecastsHandler forecastsHandler) =>
 {
     var position = new Coordinate(latitude, longitude).ToPosition();

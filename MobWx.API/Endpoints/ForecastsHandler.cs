@@ -25,9 +25,9 @@ public class ForecastsHandler : IForecastsHandler
 
     public async Task<IResult> GetForecastsAsync(PositionBase position)
     {
-        if (position is not NullPosition)
+        if (position is NullPosition)
         {
-            return Results.BadRequest("Invalid latitude (lat) or langitude (lon) values.");
+            return Results.BadRequest("Invalid latitude (lat) or longitude (lon) values.");
         }
 
         string pointsResponseJson = await _nwsEndpointAbstraction.GetNwsPointsAsync((Position)position);
@@ -70,6 +70,7 @@ public class ForecastsHandler : IForecastsHandler
                 ? "forecast"
                 : "forecasts";
             _logger.LogInformation("Deserialized {forecastcount} {forecasts}", forecastCount, forecasts);
+            return Results.Ok(forecastInstance);
         }
         else
         {
