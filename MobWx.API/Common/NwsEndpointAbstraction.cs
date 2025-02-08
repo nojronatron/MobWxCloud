@@ -138,5 +138,28 @@ namespace MobWx.API.Common
             _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             return string.Empty;
         }
+
+        /// <summary>
+        /// Fetches active alerts from the NWS API for a given position. Awaitable.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public async Task<string> GetNwsAlertsAsync(PositionBase position)
+        {
+            var httpClient = _httpClientFactory.CreateClient("NwsApi");
+            var request = new HttpRequestMessage(
+                HttpMethod.Get, NwsEndpointPaths.GetActiveAlertPath((Position)position)
+                );
+            var response = await httpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string activeAlertsJson = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation("Received active alerts JSON: {activeAlertJson}", activeAlertsJson);
+                return activeAlertsJson;
+            }
+
+            return string.Empty;
+        }
     }
 }

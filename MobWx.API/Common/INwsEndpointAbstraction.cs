@@ -6,6 +6,7 @@ namespace MobWx.API.Common
 {
     public interface INwsEndpointAbstraction
     {
+        Task<string> GetNwsAlertsAsync(PositionBase position);
         Task<string> GetNwsForecastsAsync(PointsResponse points);
         Task<string> GetNwsPointsAsync(Position position);
         Task<string> GetObservationStationsAsync(string url);
