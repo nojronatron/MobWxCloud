@@ -36,6 +36,7 @@ builder.Services.AddHttpClient("NwsElementUrl", config =>
 builder.Services.AddTransient<ICurrentConditionsHandler, CurrentConditionsHandler>();
 builder.Services.AddTransient<INwsEndpointAbstraction, NwsEndpointAbstraction>();
 builder.Services.AddTransient<IJsonHandler, JsonHandler>();
+builder.Services.AddTransient<IForecastsHandler, ForecastsHandler>();
 
 builder.Services.AddSwaggerGen();
 
@@ -69,9 +70,14 @@ app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}",
 }).WithName("Conditions");
 
 // get 7-day forecast from office nearest to lat, lon
-app.MapGet("/api/v1/forecast/{lat:float},{lon:float}", async (float lat, float lon) =>
+app.MapGet("/api/v1/forecast/{latitude:float},{longitude:float}",
+    async (
+        [FromRoute]float latitude, 
+        [FromRoute]float longitude,
+        [FromServices] IForecastsHandler forecastsHandler) =>
 {
-    return await ForecastsHandler.GetForecastsAsync(lat, lon, app);
+    var position = new Coordinate(latitude, longitude).ToPosition();
+    return await forecastsHandler.GetForecastsAsync(position);
 }).WithName("Forecast");
 
 // get alert(s) in the current zone given lat, lon
