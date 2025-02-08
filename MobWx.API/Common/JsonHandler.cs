@@ -1,5 +1,6 @@
 ﻿using MobWx.Lib.ForecastModels;
 using MobWx.Lib.Models;
+using MobWx.Lib.NwsAlertModels;
 using MobWx.Lib.PointModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -21,6 +22,11 @@ public class JsonHandler : IJsonHandler
         _logger = logger;
     }
 
+    /// <summary>
+    /// Deserializes PointsResponse JSON into a PointsResponse object.
+    /// </summary>
+    /// <param name="jsonString"></param>
+    /// <returns></returns>
     public PointsResponse? TryDeserializePointsResponse(string jsonString)
     {
         try
@@ -35,6 +41,11 @@ public class JsonHandler : IJsonHandler
         return null;
     }
 
+    /// <summary>
+    /// Deserializes ForecastResponse JSON into a ForecastResponse object.
+    /// </summary>
+    /// <param name="forecastResponseJson"></param>
+    /// <returns></returns>
     public ForecastResponse? TryDeserializeForecastResponseAsync(string forecastResponseJson)
     {
         try
@@ -49,6 +60,11 @@ public class JsonHandler : IJsonHandler
         return null;
     }
 
+    /// <summary>
+    /// Deserializes Observation JSON into an Observation object.
+    /// </summary>
+    /// <param name="jsonString"></param>
+    /// <returns></returns>
     public Observation? TryDeserializeObservation(string jsonString)
     {
         try
@@ -63,6 +79,11 @@ public class JsonHandler : IJsonHandler
         return null;
     }
 
+    /// <summary>
+    /// Extracts observation stations from a JSON array of URLs.
+    /// </summary>
+    /// <param name="objStationsUrlListJson"></param>
+    /// <returns></returns>
     public IEnumerable<string?> GetObservationStationsList(string objStationsUrlListJson)
     {
         try
@@ -82,6 +103,11 @@ public class JsonHandler : IJsonHandler
         return new List<string>();
     }
 
+    /// <summary>
+    /// Extracts the observation stations URL from a JSON object.
+    /// </summary>
+    /// <param name="points"></param>
+    /// <returns></returns>
     public string GetObservationStationsUrl(string points)
     {
         try
@@ -97,6 +123,26 @@ public class JsonHandler : IJsonHandler
         {
             _logger.LogError("Failed to parse observation stations from points: {exmessage}", ex.Message);
         }
+
         return string.Empty;
+    }
+
+    /// <summary>
+    /// Deserializes ActiveAlerts JSON into an ActiveAlerts object.
+    /// </summary>
+    /// <param name="activeAlertJson"></param>
+    /// <returns></returns>
+    public ActiveAlerts? TryDeserializeActiveAlerts(string activeAlertJson)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<ActiveAlerts>(activeAlertJson, _jsonOptions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Failed to Deserialize ActiveAlerts: {exStackTrace}", ex.StackTrace);
+        }
+
+        return null;
     }
 }
