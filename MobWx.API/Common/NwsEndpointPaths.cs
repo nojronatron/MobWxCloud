@@ -44,4 +44,16 @@ public static class NwsEndpointPaths
             return $"/points/{latLon.Latitude},{latLon.Longitude}";
         }
     }
+
+    /// <summary>
+    /// Accepts a Position object and returns the path for the active alerts endpoint.
+    /// Limited to a maximum of 12 alerts.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns>A string path for calling NWS API ActiveAlerts endpoint</returns>
+    public static string GetActiveAlertPath(Position position)
+    {
+        int limit = 12;
+        return $"/alerts/active?point={position.Latitude},{position.Longitude}&limit={limit}";
+    }
 }
