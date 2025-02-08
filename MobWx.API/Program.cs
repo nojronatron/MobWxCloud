@@ -37,6 +37,7 @@ builder.Services.AddTransient<ICurrentConditionsHandler, CurrentConditionsHandle
 builder.Services.AddTransient<INwsEndpointAbstraction, NwsEndpointAbstraction>();
 builder.Services.AddTransient<IJsonHandler, JsonHandler>();
 builder.Services.AddTransient<IForecastsHandler, ForecastsHandler>();
+builder.Services.AddTransient<IAlertsHandler, AlertsHandler>();
 
 builder.Services.AddSwaggerGen();
 
@@ -81,9 +82,14 @@ app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
 }).WithName("Forecast");
 
 // get alert(s) in the current zone given lat, lon
-app.MapGet("/api/v1/alerts/{lat:float},{lon:float}", async (float lat, float lon) =>
+app.MapGet("/api/v1/alerts/{latitude:double},{longitude:double}", 
+    async (
+        [FromRoute]double latitude, 
+        [FromRoute]double longitude,
+        [FromServices] IAlertsHandler alertsHandler) =>
 {
-    return await AlertsHandlers.GetActiveAlertsAsync(lat, lon, app);
+    var position = new Coordinate(latitude, longitude).ToPosition();
+    return await alertsHandler.GetActiveAlertsAsync(position);
 }).WithName("Alerts");
 
 app.MapGet("/health", () =>
