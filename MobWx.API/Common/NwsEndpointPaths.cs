@@ -31,18 +31,37 @@ public static class NwsEndpointPaths
     /// Get the relative path for a point.
     /// </summary>
     /// <param name="latLon"></param>
+    /// <param name="limit">max: 25, min: 1; default: 12</param>
     /// <returns></returns>
-    public static string PointPath(PositionBase latLon)
+    public static string PointPath(PositionBase latLon, int? limit)
     {
         // if latLon is of type NullPosition return an empty string
         if (latLon is NullPosition)
         {
             return string.Empty;
         }
-        else
+
+        int limitNum = 12;
+
+        if (limit is not null)
         {
-            return $"/points/{latLon.Latitude},{latLon.Longitude}";
+            if (limit > 0 && limit <= 25)
+            {
+                limitNum = (int)limit;
+            }
         }
+        
+        return $"/points/{latLon.Latitude},{latLon.Longitude}?limit={limitNum}";
+    }
+
+    /// <summary>
+    /// Get the relative path for a point. Assumes a limit of 12 alerts.
+    /// </summary>
+    /// <param name="latLon"></param>
+    /// <returns></returns>
+    public static string PointPath(PositionBase latLon)
+    {
+        return PointPath(latLon, null);
     }
 
     /// <summary>
