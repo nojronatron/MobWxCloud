@@ -61,7 +61,7 @@ public class ForecastsHandler : IForecastsHandler
             return Results.Problem("Failed to get forecast data from the NWS API. Try again later.");
         }
 
-        ForecastResponse? forecastInstance = _jsonHandler.TryDeserializeForecastResponseAsync(forecastJson);
+        ForecastResponse? forecastInstance = _jsonHandler.TryDeserializeForecastResponse(forecastJson);
 
         if (forecastInstance is not null)
         {
@@ -77,8 +77,5 @@ public class ForecastsHandler : IForecastsHandler
             _logger.LogWarning("Failed to deserialize any forecasts for location ({location}).", position.ToString());
             return Results.Problem("Unable to deserialize response from the NWS API. Try again later.");
         }
-
-        _logger.LogError("Failed to get forecast data for location ({location}).", position.ToString());
-        return Results.Problem("Failed to get forecast data from the NWS API. Try again later.");
     }
 }
