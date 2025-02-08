@@ -46,7 +46,7 @@ public class JsonHandler : IJsonHandler
     /// </summary>
     /// <param name="forecastResponseJson"></param>
     /// <returns></returns>
-    public ForecastResponse? TryDeserializeForecastResponseAsync(string forecastResponseJson)
+    public ForecastResponse? TryDeserializeForecastResponse(string forecastResponseJson)
     {
         try
         {

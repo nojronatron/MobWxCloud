@@ -1,0 +1,72 @@
+{
+  "@context": {
+    "@version": "1.1",
+    "wx": "https://api.weather.gov/ontology#",
+    "s": "https://schema.org/",
+    "geo": "http://www.opengis.net/ont/geosparql#",
+    "unit": "http://codes.wmo.int/common/unit/",
+    "@vocab": "https://api.weather.gov/ontology#",
+    "geometry": {
+      "@id": "s:GeoCoordinates",
+      "@type": "geo:wktLiteral"
+    },
+    "city": "s:addressLocality",
+    "state": "s:addressRegion",
+    "distance": {
+      "@id": "s:Distance",
+      "@type": "s:QuantitativeValue"
+    },
+    "bearing": {
+      "@type": "s:QuantitativeValue"
+    },
+    "value": {
+      "@id": "s:value"
+    },
+    "unitCode": {
+      "@id": "s:unitCode",
+      "@type": "@id"
+    },
+    "forecastOffice": {
+      "@type": "@id"
+    },
+    "forecastGridData": {
+      "@type": "@id"
+    },
+    "publicZone": {
+      "@type": "@id"
+    },
+    "county": {
+      "@type": "@id"
+    }
+  },
+  "@id": "https://api.weather.gov/points/45.6,-122.6",
+  "@type": "wx:Point",
+  "geometry": "POINT(-122.6 45.6)",
+  "cwa": "PQR",
+  "forecastOffice": "https://api.weather.gov/offices/PQR",
+  "gridId": "PQR",
+  "gridX": 116,
+  "gridY": 107,
+  "forecast": "https://api.weather.gov/gridpoints/PQR/116,107/forecast",
+  "forecastHourly": "https://api.weather.gov/gridpoints/PQR/116,107/forecast/hourly",
+  "forecastGridData": "https://api.weather.gov/gridpoints/PQR/116,107",
+  "observationStations": "https://api.weather.gov/gridpoints/PQR/116,107/stations",
+  "relativeLocation": {
+    "city": "Vancouver",
+    "state": "WA",
+    "geometry": "POINT(-122.595734 45.634918)",
+    "distance": {
+      "unitCode": "wmoUnit:m",
+      "value": 3896.8602155733
+    },
+    "bearing": {
+      "unitCode": "wmoUnit:degree_(angle)",
+      "value": 184
+    }
+  },
+  "forecastZone": "https://api.weather.gov/zones/forecast/ORZ111",
+  "county": "https://api.weather.gov/zones/county/ORC051",
+  "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ684",
+  "timeZone": "America/Los_Angeles",
+  "radarStation": "KRTX"
+}
