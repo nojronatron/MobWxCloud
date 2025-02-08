@@ -1,7 +1,6 @@
 ﻿using MobWx.Lib.Models;
 using MobWx.Lib.Models.Base;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using MobWx.Lib.PointModels;
 
 namespace MobWx.API.Common
 {
@@ -17,6 +16,59 @@ namespace MobWx.API.Common
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
+        }
+
+        /// <summary>
+        /// Fetches the Points metadata from the NWS API.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public async Task<string> GetNwsPointsAsync(Position position)
+        {
+            _logger.LogInformation("Fetching Points metadata for (lat, lon): ({position}).", position);
+
+            var pointsHttpClient = _httpClientFactory.CreateClient("NwsApi");
+            var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                NwsEndpointPaths.PointPath((Position)position)
+                );
+            var pointsResponse = await pointsHttpClient.SendAsync(request);
+
+            if (pointsResponse.IsSuccessStatusCode)
+            {
+                string pointsResponseJson = await pointsResponse.Content.ReadAsStringAsync();
+                _logger.LogInformation("Received Points metadata: {pointjson}", pointsResponseJson);
+                return pointsResponseJson;
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Fetches the Forecast data from the NWS API.
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public async Task<string> GetNwsForecastsAsync(PointsResponse points)
+        {
+            var forecastHttpClient = _httpClientFactory.CreateClient("NwsElementUrl");
+            var request = new HttpRequestMessage(
+                HttpMethod.Get, points.Forecast
+                );
+            var forecastResponse = await forecastHttpClient.SendAsync(request);
+
+            if (forecastResponse.IsSuccessStatusCode)
+            {
+                string forecastJson = await forecastResponse.Content.ReadAsStringAsync();
+                _logger.LogInformation("Fetch returned Forecast json: {forecastjson}", forecastJson);
+                return forecastJson;
+            }
+            else
+            {
+                _logger.LogWarning("NWS API did not respond or the response for a forecast was empty. Try again later or try a different location.");
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
