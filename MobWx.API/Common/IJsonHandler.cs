@@ -10,7 +10,7 @@ namespace MobWx.API.Common
         IEnumerable<string?> GetObservationStationsList(string objStationsUrlListJson);
         string GetObservationStationsUrl(string points);
         ActiveAlerts? TryDeserializeActiveAlerts(string activeAlertJson);
-        ForecastResponse? TryDeserializeForecastResponseAsync(string forecastResponseJson);
+        ForecastResponse? TryDeserializeForecastResponse(string forecastResponseJson);
         Observation? TryDeserializeObservation(string jsonString);
         PointsResponse? TryDeserializePointsResponse(string jsonString);
     }
