@@ -1,4 +1,6 @@
-﻿using MobWx.Lib.Models;
+﻿using MobWx.Lib.ForecastModels;
+using MobWx.Lib.Models;
+using MobWx.Lib.PointModels;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -19,6 +21,34 @@ public class JsonHandler : IJsonHandler
         _logger = logger;
     }
 
+    public PointsResponse? TryDeserializePointsResponse(string jsonString)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<PointsResponse>(jsonString, _jsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError("Failed to deserialize PointsResponse instance: {message}, {jsonpath}, {stacktrace}", ex.Message, ex.Path, ex.StackTrace);
+        }
+
+        return null;
+    }
+
+    public ForecastResponse? TryDeserializeForecastResponseAsync(string forecastResponseJson)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<ForecastResponse>(forecastResponseJson, _jsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError("Failed to deserialize ForecastResponse instance: {message}, {jsonpath}, {stacktrace}", ex.Message, ex.Path, ex.StackTrace);
+        }
+
+        return null;
+    }
+
     public Observation? TryDeserializeObservation(string jsonString)
     {
         try
@@ -27,7 +57,7 @@ public class JsonHandler : IJsonHandler
         }
         catch (JsonException ex)
         {
-            _logger.LogError("JSON Deserialization error: {message}, {jsonpath}, {stacktrace}", ex.Message, ex.Path, ex.StackTrace);
+            _logger.LogError("Failed to deserialize Observation instance: {message}, {jsonpath}, {stacktrace}", ex.Message, ex.Path, ex.StackTrace);
         }
 
         return null;
@@ -46,8 +76,7 @@ public class JsonHandler : IJsonHandler
         }
         catch (JsonException ex)
         {
-            _logger.LogDebug("Failed to parse observation stations from array of URLs: {exmessage}", ex.Message);
-            _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
+            _logger.LogError("Failed to parse observation stations list from array of URLs: {exmessage}", ex.Message);
         }
 
         return new List<string>();
@@ -58,6 +87,7 @@ public class JsonHandler : IJsonHandler
         try
         {
             var jsonDocument = JsonDocument.Parse(points);
+
             if (jsonDocument.RootElement.TryGetProperty("observationStations", out JsonElement stationsElement))
             {
                 return stationsElement.GetString() ?? string.Empty;
@@ -65,8 +95,7 @@ public class JsonHandler : IJsonHandler
         }
         catch (JsonException ex)
         {
-            _logger.LogDebug("Failed to parse observation stations from points: {exmessage}", ex.Message);
-            _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
+            _logger.LogError("Failed to parse observation stations from points: {exmessage}", ex.Message);
         }
         return string.Empty;
     }
