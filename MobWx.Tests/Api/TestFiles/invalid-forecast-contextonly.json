@@ -1,0 +1,19 @@
+{
+  "@context": {
+    "@version": "1.1",
+    "wx": "https://api.weather.gov/ontology#",
+    "geo": "http://www.opengis.net/ont/geosparql#",
+    "unit": "http://codes.wmo.int/common/unit/",
+    "@vocab": "https://api.weather.gov/ontology#"
+  },
+  "geometry": "POLYGON((-122.5812 45.5936,-122.5873 45.6144,-122.6171 45.6101,-122.611 45.5893,-122.5812 45.5936))",
+  "units": "us",
+  "forecastGenerator": "BaselineForecastGenerator",
+  "generatedAt": "2025-02-08T17:54:08+00:00",
+  "updateTime": "2025-02-08T17:46:56+00:00",
+  "validTimes": "2025-02-08T11:00:00+00:00/P7DT14H",
+  "elevation": {
+    "unitCode": "wmoUnit:m",
+    "value": 60.96
+  }
+}

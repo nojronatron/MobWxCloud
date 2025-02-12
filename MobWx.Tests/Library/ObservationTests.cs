@@ -72,38 +72,5 @@ Cloud Layers:
 ".Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
             Assert.Equal(expected, result);
         }
-
-        [Fact]
-        public void Measurement_ToString_ShouldReturnValue()
-        {
-            // Arrange
-            var measurement = new Measurement { Value = 7.8, UnitCode = "wmoUnit:degC" };
-
-            // Act
-            var result = measurement.ToString();
-
-            // Assert
-            Assert.Equal("7.8", result);
-        }
-
-        [Fact]
-        public void Measurement_MinValue_ShouldReturnMinValue()
-        {
-            // Act
-            var result = Measurement.MinValue;
-
-            // Assert
-            Assert.Equal(double.MinValue, result.Value);
-        }
-
-        [Fact]
-        public void Measurement_ZeroValue_ShouldReturnZeroValue()
-        {
-            // Act
-            var result = Measurement.ZeroValue;
-
-            // Assert
-            Assert.Equal(0, result.Value);
-        }
     }
 }

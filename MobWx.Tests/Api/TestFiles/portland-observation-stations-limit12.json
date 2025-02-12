@@ -1,0 +1,355 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "s": "https://schema.org/",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#",
+      "geometry": {
+        "@id": "s:GeoCoordinates",
+        "@type": "geo:wktLiteral"
+      },
+      "city": "s:addressLocality",
+      "state": "s:addressRegion",
+      "distance": {
+        "@id": "s:Distance",
+        "@type": "s:QuantitativeValue"
+      },
+      "bearing": {
+        "@type": "s:QuantitativeValue"
+      },
+      "value": {
+        "@id": "s:value"
+      },
+      "unitCode": {
+        "@id": "s:unitCode",
+        "@type": "@id"
+      },
+      "forecastOffice": {
+        "@type": "@id"
+      },
+      "forecastGridData": {
+        "@type": "@id"
+      },
+      "publicZone": {
+        "@type": "@id"
+      },
+      "county": {
+        "@type": "@id"
+      },
+      "observationStations": {
+        "@container": "@list",
+        "@type": "@id"
+      }
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/stations/KPDX",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.60917, 45.59578 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KPDX",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 6.096
+        },
+        "stationIdentifier": "KPDX",
+        "name": "Portland, Portland International Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ111",
+        "county": "https://api.weather.gov/zones/county/ORC051",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ684"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KVUO",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.65419, 45.62103 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KVUO",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 6.096
+        },
+        "stationIdentifier": "KVUO",
+        "name": "Pearson Airfield",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/WAZ206",
+        "county": "https://api.weather.gov/zones/county/WAC011",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WAZ633"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KTTD",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.40889, 45.55111 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KTTD",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 10.9728
+        },
+        "stationIdentifier": "KTTD",
+        "name": "Portland, Portland-Troutdale Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ112",
+        "county": "https://api.weather.gov/zones/county/ORC051",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ684"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/E2837",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.5, 45.8 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/E2837",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 135.0264
+        },
+        "stationIdentifier": "E2837",
+        "name": "EW2837 Battle Ground",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/WAZ208",
+        "county": "https://api.weather.gov/zones/county/WAC011",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WAZ633"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/TR951",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.34528, 45.7230599 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/TR951",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 350.52
+        },
+        "stationIdentifier": "TR951",
+        "name": "LARCH MT.",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/WAZ208",
+        "county": "https://api.weather.gov/zones/county/WAC011",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WAZ633"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KHIO",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.95568, 45.54765 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KHIO",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 59.1312
+        },
+        "stationIdentifier": "KHIO",
+        "name": "Portland-Hillsboro Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ109",
+        "county": "https://api.weather.gov/zones/county/ORC067",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ684"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/TBELL",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.203, 45.569 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/TBELL",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 148.1328
+        },
+        "stationIdentifier": "TBELL",
+        "name": "CAPE HORN",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/WAZ211",
+        "county": "https://api.weather.gov/zones/county/WAC059",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WAZ636"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/EGKO3",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.33097, 45.36794 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/EGKO3",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 224.6376
+        },
+        "stationIdentifier": "EGKO3",
+        "name": "EAGLE CREEK",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ113",
+        "county": "https://api.weather.gov/zones/county/ORC005",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ686"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/FOGO",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -123.08361, 45.55306 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/FOGO",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 54.864
+        },
+        "stationIdentifier": "FOGO",
+        "name": "FOREST GROVE",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ109",
+        "county": "https://api.weather.gov/zones/county/ORC067",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ684"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/KUAO",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.77095, 45.24658 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/KUAO",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 59.1312
+        },
+        "stationIdentifier": "KUAO",
+        "name": "Aurora State Airport",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ115",
+        "county": "https://api.weather.gov/zones/county/ORC047",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ684"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/CYFW1",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.20278, 45.92944 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/CYFW1",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 790.0416
+        },
+        "stationIdentifier": "CYFW1",
+        "name": "CANYON CREEK",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/WAZ211",
+        "county": "https://api.weather.gov/zones/county/WAC059",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/WAZ634"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/ODT15",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -122.0348, 45.37633 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/ODT15",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 330.0984
+        },
+        "stationIdentifier": "ODT15",
+        "name": "US26 EB at Brightwood Scales MP36.51",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ123",
+        "county": "https://api.weather.gov/zones/county/ORC005",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ686"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/stations/LGFO3",
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ -121.89646, 45.49658 ]
+      },
+      "properties": {
+        "@id": "https://api.weather.gov/stations/LGFO3",
+        "@type": "wx:ObservationStation",
+        "elevation": {
+          "unitCode": "wmoUnit:m",
+          "value": 869.8992
+        },
+        "stationIdentifier": "LGFO3",
+        "name": "LOG CREEK",
+        "timeZone": "America/Los_Angeles",
+        "forecast": "https://api.weather.gov/zones/forecast/ORZ126",
+        "county": "https://api.weather.gov/zones/county/ORC051",
+        "fireWeatherZone": "https://api.weather.gov/zones/fire/ORZ688"
+      }
+    }
+  ],
+  "observationStations": [
+    "https://api.weather.gov/stations/KPDX",
+    "https://api.weather.gov/stations/KVUO",
+    "https://api.weather.gov/stations/KTTD",
+    "https://api.weather.gov/stations/E2837",
+    "https://api.weather.gov/stations/TR951",
+    "https://api.weather.gov/stations/KHIO",
+    "https://api.weather.gov/stations/TBELL",
+    "https://api.weather.gov/stations/EGKO3",
+    "https://api.weather.gov/stations/FOGO",
+    "https://api.weather.gov/stations/KUAO",
+    "https://api.weather.gov/stations/CYFW1",
+    "https://api.weather.gov/stations/ODT15"
+  ],
+  "pagination": {
+    "next": "https://api.weather.gov/stations?id%5B0%5D=ABNW1&id%5B1%5D=AP682&id%5B2%5D=AS531&id%5B3%5D=AT297&id%5B4%5D=BDFO3&id%5B5%5D=BKRW1&id%5B6%5D=BOFO3&id%5B7%5D=BRUO3&id%5B8%5D=C8892&id%5B9%5D=CCRO3&id%5B10%5D=CDFO3&id%5B11%5D=CNFO3&id%5B12%5D=CRVO&id%5B13%5D=CYFW1&id%5B14%5D=DCCW1&id%5B15%5D=DEFO&id%5B16%5D=DTRO3&id%5B17%5D=E2837&id%5B18%5D=EGKO3&id%5B19%5D=EMFO3&id%5B20%5D=FEFO3&id%5B21%5D=FNWO3&id%5B22%5D=FOGO&id%5B23%5D=GOV50&id%5B24%5D=GPFO3&id%5B25%5D=GVT50&id%5B26%5D=HSFO3&id%5B27%5D=K4S2&id%5B28%5D=K6S2&id%5B29%5D=KAST&id%5B30%5D=KCVO&id%5B31%5D=KEUG&id%5B32%5D=KHIO&id%5B33%5D=KKLS&id%5B34%5D=KMMV&id%5B35%5D=KONP&id%5B36%5D=KPDX&id%5B37%5D=KSLE&id%5B38%5D=KTMK&id%5B39%5D=KTTD&id%5B40%5D=KUAO&id%5B41%5D=KVUO&id%5B42%5D=LGFO3&id%5B43%5D=LKSO3&id%5B44%5D=LOFO3&id%5B45%5D=MHM54&id%5B46%5D=MHM66&id%5B47%5D=MHM73&id%5B48%5D=MLLO3&id%5B49%5D=MMRO3&id%5B50%5D=MSH32&id%5B51%5D=MSH33&id%5B52%5D=MTRO3&id%5B53%5D=ODT09&id%5B54%5D=ODT13&id%5B55%5D=ODT15&id%5B56%5D=ODT46&id%5B57%5D=ODT57&id%5B58%5D=ODT78&id%5B59%5D=ODT93&id%5B60%5D=ODT96&id%5B61%5D=PARO&id%5B62%5D=PEFO3&id%5B63%5D=PNGO&id%5B64%5D=RKHO3&id%5B65%5D=RXFO3&id%5B66%5D=SFKO3&id%5B67%5D=SGFO3&id%5B68%5D=SYNO3&id%5B69%5D=TBELL&id%5B70%5D=TCFO3&id%5B71%5D=TIM59&id%5B72%5D=TIM60&id%5B73%5D=TIM70&id%5B74%5D=TMKO3&id%5B75%5D=TR950&id%5B76%5D=TR951&id%5B77%5D=VCFO3&id%5B78%5D=WKF03&id%5B79%5D=WPKO3&id%5B80%5D=YEFO3&cursor=eyJzIjo1MDB9"
+  }
+}

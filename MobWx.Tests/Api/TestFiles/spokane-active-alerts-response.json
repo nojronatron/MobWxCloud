@@ -1,0 +1,92 @@
+{
+  "@context": {
+    "@version": "1.1",
+    "wx": "https://api.weather.gov/ontology#",
+    "@vocab": "https://api.weather.gov/ontology#"
+  },
+  "@graph": [
+    {
+      "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.38ebc31827f09f74050d9111dce144a037eff837.003.1",
+      "@type": "wx:Alert",
+      "id": "urn:oid:2.49.0.1.840.0.38ebc31827f09f74050d9111dce144a037eff837.003.1",
+      "areaDesc": "Idaho Palouse; Central Panhandle Mountains; Washington Palouse",
+      "geometry": null,
+      "geocode": {
+        "SAME": [
+          "016009",
+          "016057",
+          "016055",
+          "016079",
+          "053063",
+          "053075"
+        ],
+        "UGC": [
+          "IDZ003",
+          "IDZ004",
+          "WAZ033"
+        ]
+      },
+      "affectedZones": [
+        "https://api.weather.gov/zones/forecast/IDZ003",
+        "https://api.weather.gov/zones/forecast/IDZ004",
+        "https://api.weather.gov/zones/forecast/WAZ033"
+      ],
+      "references": [
+        {
+          "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.74530b072ed052bb246e1b7ecd5c18a34ae2c6e7.001.1",
+          "identifier": "urn:oid:2.49.0.1.840.0.74530b072ed052bb246e1b7ecd5c18a34ae2c6e7.001.1",
+          "sender": "w-nws.webmaster@noaa.gov",
+          "sent": "2025-02-07T11:25:00-08:00"
+        },
+        {
+          "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.bf7ec0975ec392f5eb18f43b96e4cfeb263773b5.001.1",
+          "identifier": "urn:oid:2.49.0.1.840.0.bf7ec0975ec392f5eb18f43b96e4cfeb263773b5.001.1",
+          "sender": "w-nws.webmaster@noaa.gov",
+          "sent": "2025-02-08T04:21:00-08:00"
+        }
+      ],
+      "sent": "2025-02-08T04:52:00-08:00",
+      "effective": "2025-02-08T04:52:00-08:00",
+      "onset": "2025-02-08T04:52:00-08:00",
+      "expires": "2025-02-08T19:00:00-08:00",
+      "ends": "2025-02-09T01:00:00-08:00",
+      "status": "Actual",
+      "messageType": "Update",
+      "category": "Met",
+      "severity": "Moderate",
+      "certainty": "Likely",
+      "urgency": "Expected",
+      "event": "Winter Weather Advisory",
+      "sender": "w-nws.webmaster@noaa.gov",
+      "senderName": "NWS Spokane WA",
+      "headline": "Winter Weather Advisory issued February 8 at 4:52AM PST until February 9 at 1:00AM PST by NWS Spokane WA",
+      "description": "* WHAT...Snow. Additional snow accumulations between 1 and 3 inches.\n\n* WHERE...Oakesdale, Moscow, Plummer, Tekoa, Pullman, La Crosse,\nOsburn, Wallace, Kellogg, Dobson Pass, Colfax, Pinehurst, Fourth\nOf July Pass, Fernwood, Genesee, Rosalia, Potlatch, Mullan,\nLookout Pass, St. Maries, and Uniontown.\n\n* WHEN...Until 1 AM PST Sunday.\n\n* IMPACTS...Plan on slippery road conditions.",
+      "instruction": "Slow down and use caution while traveling. In Idaho, for the latest\nroad information in Idaho, call 5 1 1. In Washington, for the latest\ntravel information in Washington, go to https://wsdot.wa.gov/travel",
+      "response": "Execute",
+      "parameters": {
+        "AWIPSidentifier": [
+          "WSWOTX"
+        ],
+        "WMOidentifier": [
+          "WWUS46 KOTX 081252"
+        ],
+        "NWSheadline": [
+          "WINTER WEATHER ADVISORY NOW IN EFFECT UNTIL 1 AM PST SUNDAY"
+        ],
+        "BLOCKCHANNEL": [
+          "EAS",
+          "NWEM",
+          "CMAS"
+        ],
+        "VTEC": [
+          "/O.EXT.KOTX.WW.Y.0009.250208T1252Z-250209T0900Z/"
+        ],
+        "eventEndingTime": [
+          "2025-02-09T09:00:00+00:00"
+        ]
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for 46.9 N, 116.9 W",
+  "updated": "2025-02-08T12:53:24+00:00"
+}
