@@ -1,4 +1,4 @@
-﻿namespace MobWx.Lib.Enumerations;
+﻿namespace MobWx.Lib.Enums;
 
 public enum Amount
 {

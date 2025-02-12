@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
+using MobWx.API.Common;
+using MobWx.API.Endpoints;
 using MobWx.API.Models;
-using MobWx.Lib.Common;
-using MobWx.Lib.Models;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +11,6 @@ var httpClientBaseUrl = builder.Configuration["HttpClient:WeatherApiAddress"] ??
 var httpUserAgent = builder.Configuration["HttpClient:UserAgentHeader"] ?? null;
 var httpAcceptHeader = builder.Configuration["HttpClient:AcceptHeader"] ?? null;
 var httpCtsTimeout = builder.Configuration["HttpClient:CancelTokenTimeout"] ?? "2000";
-
-Debug.WriteLine($"httpClientBaseUrl: {httpClientBaseUrl}\thttpUserAgent: {httpUserAgent}\thttpAcceptHeader: {httpAcceptHeader}\thttpCtsTimeout: {httpCtsTimeout}");
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -24,7 +22,7 @@ builder.Services.AddHttpClient("NwsApi", config =>
     config.BaseAddress = new Uri(httpClientBaseUrl);
     config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
     config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
-    config.Timeout = TimeSpan.FromSeconds(int.Parse(httpCtsTimeout));
+    config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
 });
 
 // fetch data from extracted NWS urls
@@ -32,10 +30,14 @@ builder.Services.AddHttpClient("NwsElementUrl", config =>
 {
     config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
     config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
-    config.Timeout = TimeSpan.FromSeconds(int.Parse(httpCtsTimeout));
+    config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
 });
 
-builder.Services.AddTransient<INwsApiAbstraction, NwsApiAbstraction>();
+builder.Services.AddTransient<ICurrentConditionsHandler, CurrentConditionsHandler>();
+builder.Services.AddTransient<INwsEndpointAbstraction, NwsEndpointAbstraction>();
+builder.Services.AddTransient<IJsonHandler, JsonHandler>();
+builder.Services.AddTransient<IForecastsHandler, ForecastsHandler>();
+builder.Services.AddTransient<IAlertsHandler, AlertsHandler>();
 
 builder.Services.AddSwaggerGen();
 
@@ -57,54 +59,38 @@ app.UseHttpsRedirection();
  */
 
 // get current weather conditions from office nearest to lat, lon
-app.MapGet("/api/v1/conditions/{lat:float},{lon:float}", async (float lat, float lon, HttpContext httpContext) =>
+app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}", 
+    async (
+        [FromRoute]double latitude, 
+        [FromRoute]double longitude,
+        [FromServices] ICurrentConditionsHandler currentConditionsHandler
+    ) =>
 {
-    var position = Position.Create(lat.ToString(), lon.ToString());
-
-    if (position is NullPosition)
-    {
-        return Results.BadRequest("Invalid latitude (lat) or langitude (lon) values.");
-    }
-
-    try
-    {
-        using IServiceScope scope = app.Services.CreateScope();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        var nwsApiAbstraction = scope.ServiceProvider.GetRequiredService<INwsApiAbstraction>();
-        logger.LogInformation("Fetting current conditions for (lat, lon): ({lat}, {lon}).", lat, lon);
-
-        Observation currentCondition = await nwsApiAbstraction.GetCurrentConditionsAsync(position);
-
-        if (currentCondition is null)
-        {
-            logger.LogWarning("No current conditions found for (lat, lon): ({lat}, {lon}).", lat, lon);
-            return Results.NotFound("No current conditions found.");
-        }
-
-        // convert currentCondition into client-friendly JSON
-        CurrentObservation currentObservation = CurrentObservation.Create(currentCondition);
-        logger.LogInformation("Returning current observation to web requestor with timestamp {currObsTimestamp}", currentObservation.Timestamp);
-        return Results.Ok(currentObservation);
-    }
-    catch (Exception ex)
-    {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while fetching current conditions for lat: {lat}, lon: {lon}", lat, lon);
-        return Results.Problem("An error occurred while processing your request.");
-    }
-});
+    var position = new Coordinate(latitude, longitude).ToPosition();
+    return await currentConditionsHandler.GetCurrentConditionsAsync(position);
+}).WithName("Conditions");
 
 // get 7-day forecast from office nearest to lat, lon
-app.MapGet("/api/v1/forecast/{lat:float},{lon:float}", (HttpRequest request) =>
+app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
+    async (
+        [FromRoute]double latitude, 
+        [FromRoute]double longitude,
+        [FromServices] IForecastsHandler forecastsHandler) =>
 {
-
-});
+    var position = new Coordinate(latitude, longitude).ToPosition();
+    return await forecastsHandler.GetForecastsAsync(position);
+}).WithName("Forecast");
 
 // get alert(s) in the current zone given lat, lon
-app.MapGet("/api/v1/alerts/{lat:float},{lon:float}", (HttpRequest request) =>
+app.MapGet("/api/v1/alerts/{latitude:double},{longitude:double}", 
+    async (
+        [FromRoute]double latitude, 
+        [FromRoute]double longitude,
+        [FromServices] IAlertsHandler alertsHandler) =>
 {
-
-});
+    var position = new Coordinate(latitude, longitude).ToPosition();
+    return await alertsHandler.GetActiveAlertsAsync(position);
+}).WithName("Alerts");
 
 app.MapGet("/health", () =>
 {

@@ -2,8 +2,21 @@ using MobWx.Lib.Models;
 
 namespace MobWx.Tests.Library;
 
-public class MeasurementTests
+public class MeasurementClassTests
 {
+    [Fact]
+    public void Measurement_ToString_ShouldReturnValue()
+    {
+        // Arrange
+        var measurement = new Measurement { Value = 7.8, UnitCode = "wmoUnit:degC" };
+
+        // Act
+        var result = measurement.ToString();
+
+        // Assert
+        Assert.Equal("7.8", result);
+    }
+
     [Fact]
     public void Measurement_DefaultValues_ShouldReturnExpectedValues()
     {

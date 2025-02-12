@@ -1,6 +1,6 @@
 ﻿namespace MobWx.Lib.Models;
 
-using MobWx.Lib.Enumerations;
+using MobWx.Lib.Enums;
 using System.Text.Json.Serialization;
 
 public class CloudLayer
