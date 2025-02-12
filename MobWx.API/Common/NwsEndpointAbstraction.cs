@@ -23,24 +23,19 @@ namespace MobWx.API.Common
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public async Task<string> GetNwsPointsAsync(Position position)
+        public async Task<string> GetPointDataAsync(PositionBase position)
         {
-            _logger.LogInformation("Fetching Points metadata for (lat, lon): ({position}).", position);
+            var httpClient = _httpClientFactory.CreateClient("NwsApi");
+            var request = new HttpRequestMessage(HttpMethod.Get, NwsEndpointPaths.PointPath(position));
+            var response = await httpClient.SendAsync(request);
 
-            var pointsHttpClient = _httpClientFactory.CreateClient("NwsApi");
-            var request = new HttpRequestMessage(
-                HttpMethod.Get,
-                NwsEndpointPaths.PointPath((Position)position)
-                );
-            var pointsResponse = await pointsHttpClient.SendAsync(request);
-
-            if (pointsResponse.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                string pointsResponseJson = await pointsResponse.Content.ReadAsStringAsync();
-                _logger.LogInformation("Received Points metadata: {pointjson}", pointsResponseJson);
-                return pointsResponseJson;
+                return await response.Content.ReadAsStringAsync();
             }
 
+            _logger.LogDebug("Failed to get point data for {positionlongitude}, {positionlongitude}", position.Longitude, position.Longitude);
+            _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             return string.Empty;
         }
 
@@ -81,20 +76,45 @@ namespace MobWx.API.Common
             string obsStationId = observationStationUrl.Split('/').Last();
             _logger.LogInformation("Selected station with element: {stnpath} and station ID {stnid}", observationStationUrl, obsStationId);
 
-            var httpClient = _httpClientFactory.CreateClient("NwsApi"); // base: https://api.weather.gov
-            var request = new HttpRequestMessage(HttpMethod.Get, NwsEndpointPaths.LatestObsPath(obsStationId)); // req uri: /stations/{stationId}/observations/latest
-            var response = await httpClient.SendAsync(request);
+            var observationHttpClient = _httpClientFactory.CreateClient("NwsApi");
+            var request = new HttpRequestMessage(HttpMethod.Get, NwsEndpointPaths.LatestObsPath(obsStationId));
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                _logger.LogInformation("Fetch returned with a success status code with content length of {contentlength}.", response.Content.Headers.ContentLength);
-                return await response.Content.ReadAsStringAsync();
+                var response = await observationHttpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Fetch returned with a success status code with content length of {contentlength}.", response.Content.Headers.ContentLength);
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    _logger.LogWarning("Request for Observation Station {obsstnid} failed. A non-success status code was returned.", obsStationId);
+                }
             }
-            else
+            catch (ArgumentNullException anex)
             {
-                _logger.LogError("Unable to fetch observation url to Observation Station {obsstnid}", obsStationId);
-                return "Unable to fetch data from the NWS NOAA API. Try again later.";
+                _logger.LogError("An argument was null. Observation data will not be fetched: {exception}", anex.StackTrace);
             }
+            catch (InvalidOperationException ioex)
+            {
+                _logger.LogError("An invalid operation was attempted before or while requesting observation data from {obsstnid}: {exception}", obsStationId, ioex.StackTrace);
+            }
+            catch (HttpRequestException hrex)
+            {
+                _logger.LogError("An exception occurred while requesting data from Observation Station {osbstnid}: {exception}", obsStationId, hrex.StackTrace);
+            }
+            catch (TaskCanceledException tcex)
+            {
+                _logger.LogError("The fetch data task for station {obsstnid} was canceled. {exception}", obsStationId, tcex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("An exception occurred calling {obsstnid}: {exception}", obsStationId, ex.StackTrace);
+            }
+
+            return "Unable to fetch data from the NWS NOAA API. Try again later or use a different location.";
         }
 
         /// <summary>
@@ -104,9 +124,9 @@ namespace MobWx.API.Common
         /// <returns></returns>
         public async Task<string> GetObservationStationsAsync(string url)
         {
-            var httpClient = _httpClientFactory.CreateClient("NwsElementUrl");
+            var observationStationsHttpClient = _httpClientFactory.CreateClient("NwsElementUrl");
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-            var response = await httpClient.SendAsync(request);
+            var response = await observationStationsHttpClient.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {
@@ -114,27 +134,6 @@ namespace MobWx.API.Common
             }
 
             _logger.LogDebug("Failed to get observation stations from {url}", url);
-            _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Get point data from NWS API.
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns></returns>
-        public async Task<string> GetPointDataAsync(PositionBase position)
-        {
-            var httpClient = _httpClientFactory.CreateClient("NwsApi");
-            var request = new HttpRequestMessage(HttpMethod.Get, NwsEndpointPaths.PointPath(position));
-            var response = await httpClient.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadAsStringAsync();
-            }
-
-            _logger.LogDebug("Failed to get point data for {positionlongitude}, {positionlongitude}", position.Longitude, position.Longitude);
             _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             return string.Empty;
         }
