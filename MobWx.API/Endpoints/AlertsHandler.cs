@@ -22,7 +22,7 @@ public class AlertsHandler : IAlertsHandler
     }
 
     /// <summary>
-    /// Fetches active alerts from the NWS API for a given position. Awaitable.
+    /// Orchestrates fetching active alerts from the NWS API for a given position.
     /// </summary>
     /// <param name="app"></param>
     /// <param name="httpRequest"></param>
