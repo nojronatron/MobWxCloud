@@ -30,7 +30,7 @@ public class ForecastsHandler : IForecastsHandler
             return Results.BadRequest("Invalid latitude (lat) or longitude (lon) values.");
         }
 
-        string pointsResponseJson = await _nwsEndpointAbstraction.GetNwsPointsAsync((Position)position);
+        string pointsResponseJson = await _nwsEndpointAbstraction.GetPointDataAsync((Position)position);
 
         if (string.IsNullOrEmpty(pointsResponseJson))
         {
