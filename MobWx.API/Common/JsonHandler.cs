@@ -1,5 +1,6 @@
 ﻿using MobWx.Lib.ForecastModels;
 using MobWx.Lib.Models;
+using MobWx.Lib.Models.Geocoding;
 using MobWx.Lib.NwsAlertModels;
 using MobWx.Lib.PointModels;
 using System.Text.Json;
@@ -36,6 +37,30 @@ public class JsonHandler : IJsonHandler
         catch (JsonException ex)
         {
             _logger.LogError("Failed to deserialize PointsResponse instance: {message}, {jsonpath}, {stacktrace}", ex.Message, ex.Path, ex.StackTrace);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Deserializes Location JSON into a Location object.
+    /// </summary>
+    /// <param name="geoJsonData"></param>
+    /// <returns></returns>
+    public GeocodeResponse? TryDeserializeGeocodeResponse(string geoJsonData)
+    {
+        try
+        {
+            _logger.LogInformation("About to attempt deserialization of the following json string: {jsonstring}", geoJsonData);
+            return JsonSerializer.Deserialize<GeocodeResponse>(geoJsonData, _jsonOptions);
+        }
+        catch (JsonException jex)
+        {
+            _logger.LogError("Failed to deserialize Location instance: {message}, {jsonpath}, {stacktrace}", jex.Message, jex.Path, jex.StackTrace);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("An unexpected Exception was thrown: {message}, {stacktrace}", ex.Message, ex.StackTrace);
         }
 
         return null;
