@@ -1,34 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
 using MobWx.API.Common;
 using MobWx.API.Endpoints;
-using MobWx.API.Models;
+using MobWx.Lib.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-var httpClientBaseUrl = builder.Configuration["HttpClient:WeatherApiAddress"] ?? "localhost";
+// common httpclient config
 var httpUserAgent = builder.Configuration["HttpClient:UserAgentHeader"] ?? null;
-var httpAcceptHeader = builder.Configuration["HttpClient:AcceptHeader"] ?? null;
 var httpCtsTimeout = builder.Configuration["HttpClient:CancelTokenTimeout"] ?? "2000";
+
+// nws httpclient config
+var httpClientBaseNwsUrl = builder.Configuration["HttpClient:WeatherApiAddress"] ?? "localhost";
+var httpAcceptHeaderNws = builder.Configuration["HttpClient:AcceptHeaderNws"] ?? null;
+
+// osm httpclient config
+var httpClientBaseOsmUrl = builder.Configuration["HttpClient:OpenStreetMapsApiAddress"] ?? null;
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-// originate specific endpoint calls to NWS API
+// http client originates specific endpoint calls to NWS API
 builder.Services.AddHttpClient("NwsApi", config =>
 {
-    config.BaseAddress = new Uri(httpClientBaseUrl);
-    config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
+    config.BaseAddress = new Uri(httpClientBaseNwsUrl);
+    config.DefaultRequestHeaders.Add("Accept", httpAcceptHeaderNws);
     config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
     config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
 });
 
-// fetch data from extracted NWS urls
+// http client fetches data from extracted NWS urls
 builder.Services.AddHttpClient("NwsElementUrl", config =>
 {
-    config.DefaultRequestHeaders.Add("Accept", httpAcceptHeader);
+    config.DefaultRequestHeaders.Add("Accept", httpAcceptHeaderNws);
+    config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
+    config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
+});
+
+// http client originates specific endpoing calls to OpenStreetMaps API
+builder.Services.AddHttpClient("OsmApi", config =>
+{
+    config.BaseAddress = new Uri("https://nominatim.openstreetmap.org/");
     config.DefaultRequestHeaders.Add("User-Agent", httpUserAgent);
     config.Timeout = TimeSpan.FromMilliseconds(int.Parse(httpCtsTimeout));
 });
@@ -38,6 +52,8 @@ builder.Services.AddTransient<INwsEndpointAbstraction, NwsEndpointAbstraction>()
 builder.Services.AddTransient<IJsonHandler, JsonHandler>();
 builder.Services.AddTransient<IForecastsHandler, ForecastsHandler>();
 builder.Services.AddTransient<IAlertsHandler, AlertsHandler>();
+builder.Services.AddTransient<ILocationHandler, LocationHandler>();
+builder.Services.AddTransient<IOpenStreetMapsAbstraction, OpenStreetMapsAbstraction>();
 
 builder.Services.AddSwaggerGen();
 
@@ -57,6 +73,18 @@ app.UseHttpsRedirection();
 /* 
  * begin endpoints definitions 
  */
+
+// get geocoded lat and lon from city, state (continuous US plus Alaska and Hawaii)
+app.MapGet("/api/v1/location/{city},{state}",
+    async (
+        [FromRoute] string city,
+        [FromRoute] string state,
+        [FromServices] ILocationHandler locationHandler
+        )
+    =>
+    {
+        return await locationHandler.GetGeoLocationAsync(city, state);
+    }).WithName("Location");
 
 // get current weather conditions from office nearest to lat, lon
 app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}", 
