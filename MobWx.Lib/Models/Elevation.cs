@@ -3,7 +3,7 @@
 /// <summary>
 /// NWS API returns Elevation as unit Meters (m) (as a Double value type???)
 /// </summary>
-public class Elevation : QuantitativeValueDouble
+public class Elevation : QuantitativeValue
 {
    public override string ToString()
     {

@@ -14,7 +14,7 @@ public class RelativeLocation
     public QuantitativeValue? Distance { get; set; }
 
     [JsonPropertyName("bearing")]
-    public QuantitativeValueInt? Bearing { get; set; }
+    public QuantitativeValue? Bearing { get; set; }
 
     public string? DistanceKm => Distance is not null && Distance.Value is not null ? $"{Math.Round(Distance.Value.Value / 100, 1)}" : null;
     public string? DistanceMi => Distance is not null && Distance.Value is not null ? $"{Math.Round(Distance.Value.Value / 160.9344, 1)}" : null;
