@@ -2,17 +2,15 @@
 
 namespace MobWx.Lib.Models
 {
-    public class QuantitativeValueInt : MeasurementInt
+    public class QuantitativeValueInt : QuantitativeValue
     {
+        [JsonPropertyName("value")]
+        new public int? Value { get; set; }
+
         [JsonPropertyName("maxValue")]
-        public double? MaxValue { get; set; }
+        public int? MaxValue { get; set; }
 
         [JsonPropertyName("minValue")]
-        new public double? MinValue { get; set; }
-
-        public override string ToString()
-        {
-            return Value?.ToString("F1") ?? string.Empty;
-        }
+        public int? MinValue { get; set; }
     }
 }

@@ -29,43 +29,43 @@ public partial class Observation
     public string Icon { get; set; } = string.Empty; // api.weather.gov/icons/{area}/{dayNite}/{sky}?size={size}
 
     [JsonPropertyName("temperature")]
-    public Temperature? Temperature { get; set; }
+    public QuantitativeValue? Temperature { get; set; }
 
     [JsonPropertyName("dewpoint")]
-    public Dewpoint? Dewpoint { get; set; }
+    public QuantitativeValue? Dewpoint { get; set; }
 
     [JsonPropertyName("windDirection")]
-    public WindDirection? WindDirection { get; set; }
+    public QuantitativeValue? WindDirection { get; set; }
 
     [JsonPropertyName("windSpeed")]
-    public WindSpeed? WindSpeed { get; set; }
+    public QuantitativeValue? WindSpeed { get; set; }
 
     [JsonPropertyName("windGust")]
-    public WindGust? WindGust { get; set; }
+    public QuantitativeValue? WindGust { get; set; }
 
     [JsonPropertyName("barometricPressure")]
-    public BarometricPressure? BarometricPressureHpa { get; set; }
+    public QuantitativeValue? BarometricPressureHpa { get; set; }
 
     [JsonPropertyName("visibility")]
-    public Visibility? Visibility { get; set; }
+    public QuantitativeValue? Visibility { get; set; }
 
     [JsonPropertyName("maxTemperatureLast24Hours")]
-    public MaxTemperatureLast24Hours? MaxTemperatureLast24Hours { get; set; }
+    public QuantitativeValue? MaxTemperatureLast24Hours { get; set; }
 
     [JsonPropertyName("minTemperatureLast24Hours")]
-    public MinTemperatureLast24Hours? MinTemperatureLast24Hours { get; set; }
+    public QuantitativeValue? MinTemperatureLast24Hours { get; set; }
 
     [JsonPropertyName("precipitationLastHour")]
-    public PrecipitationLastHour? PrecipitationLastHour { get; set; }
+    public QuantitativeValue? PrecipitationLastHour { get; set; }
 
     [JsonPropertyName("relativeHumidity")]
-    public Rh? RelativeHumidity { get; set; }
+    public QuantitativeValue? RelativeHumidity { get; set; }
 
     [JsonPropertyName("windChill")]
-    public WindChill? WindChill { get; set; }
+    public QuantitativeValue? WindChill { get; set; }
 
     [JsonPropertyName("heatIndex")]
-    public HeatIndex? HeatIndex { get; set; }
+    public QuantitativeValue? HeatIndex { get; set; }
 
     [JsonPropertyName("cloudLayers")]
     public List<CloudLayer>? CloudLayers { get; set; }

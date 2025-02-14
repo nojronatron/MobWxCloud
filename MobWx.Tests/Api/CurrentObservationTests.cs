@@ -18,23 +18,23 @@ public class CurrentObservationTests
             RawMessage = "Test raw message",
             TextDescription = "Cloudy",
             Icon = "http://example.com/icon.png",
-            Temperature = new Temperature { Value = 7.8, UnitCode = "wmoUnit:degC" },
-            Dewpoint = new Dewpoint { Value = -5, UnitCode = "wmoUnit:degC" },
-            WindDirection = new WindDirection { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
-            WindSpeed = new WindSpeed { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
-            WindGust = new WindGust { Value = null, UnitCode = "wmoUnit:km_h-1" },
-            BarometricPressureHpa = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
-            Visibility = new Visibility { Value = 16090, UnitCode = "wmoUnit:m" },
-            MaxTemperatureLast24Hours = new MaxTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
-            MinTemperatureLast24Hours = new MinTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
-            PrecipitationLastHour = new PrecipitationLastHour { Value = null, UnitCode = "wmoUnit:mm" },
-            WindChill = new WindChill { Value = 4.8, UnitCode = "wmoUnit:degC" },
-            HeatIndex = new HeatIndex { Value = null, UnitCode = "wmoUnit:degC" },
+            Temperature = new QuantitativeValue { Value = 7.8, UnitCode = "wmoUnit:degC" },
+            Dewpoint = new QuantitativeValue { Value = -5, UnitCode = "wmoUnit:degC" },
+            WindDirection = new QuantitativeValue { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
+            WindSpeed = new QuantitativeValue { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
+            WindGust = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:km_h-1" },
+            BarometricPressureHpa = new QuantitativeValue { Value = 101860, UnitCode = "wmoUnit:Pa" },
+            Visibility = new QuantitativeValue { Value = 16090, UnitCode = "wmoUnit:m" },
+            MaxTemperatureLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+            MinTemperatureLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+            PrecipitationLastHour = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:mm" },
+            WindChill = new QuantitativeValue { Value = 4.8, UnitCode = "wmoUnit:degC" },
+            HeatIndex = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
             CloudLayers =
             [
                 new CloudLayer
                 {
-                    CloudBase = new MeasurementInt { Value = 2740, UnitCode = "wmoUnit:m" },
+                    CloudBase = new QuantitativeValue { Value = 2740, UnitCode = "wmoUnit:m" },
                     Amount = Amount.OVC
                 }
             ]
@@ -81,7 +81,7 @@ public class CurrentObservationTests
         Assert.NotNull(currentObservation.CloudLayers[0].Description);
         Assert.Equal("OVC", currentObservation.CloudLayers[0].Description);
         Assert.NotNull(currentObservation.CloudLayers[0].HeightMeters);
-        Assert.Equal("2740", currentObservation.CloudLayers[0].HeightMeters);
+        Assert.Equal("2740.0", currentObservation.CloudLayers[0].HeightMeters);
         Assert.Equal("8990", currentObservation.CloudLayers[0].HeightFeet);
     }
 

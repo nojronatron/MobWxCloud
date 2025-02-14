@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 public class CloudLayer
 {
     [JsonPropertyName("base")]
-    public MeasurementInt? CloudBase { get; set; }
+    public QuantitativeValue? CloudBase { get; set; }
 
     [JsonPropertyName("amount")]
     public Amount? Amount { get; set; }
@@ -20,7 +20,9 @@ public class CloudLayer
         result += ", ";
         result += CloudBase is null
             ? "unk"
-            : CloudBase.ToString();
+            : CloudBase.Value is null
+                ? "unk"
+                : CloudBase.Value.Value.ToString();
         return result;
     }
 }
