@@ -20,7 +20,7 @@ public class CloudLayerTests
         var ovcCloudLayer = new CloudLayer()
         {
             Amount = Amount.OVC,
-            CloudBase = new QuantitativeValueInt { Value = 2740, UnitCode = "wmoUnit:m" }
+            CloudBase = new QuantitativeValue { Value = 2740, UnitCode = "wmoUnit:m" }
         };
 
         // Act & Assert

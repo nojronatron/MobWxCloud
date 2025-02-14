@@ -55,15 +55,15 @@ Text Description: Cloudy
 Icon: http://example.com/icon.png
 Temperature: 7.8
 Dewpoint: -1.1
-Wind Direction: 170.0
-Wind Speed: 18.4
+Wind Direction: 170
+Wind Speed: 18.36
 Wind Gust: 
-Barometric Pressure: 101860.0
-Visibility: 16090.0
+Barometric Pressure: 101860
+Visibility: 16090
 Max Temp Last 24 Hours: 
 Min Temp Last 24 Hours: 
 Precipitation Last Hour: 
-Rh: 93.0
+Rh: 93
 Wind Chill: 4.8
 Heat Index: 
 Cloud Layers:
