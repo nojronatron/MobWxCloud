@@ -22,7 +22,7 @@ public class CloudLayer
             ? "unk"
             : CloudBase.Value is null
                 ? "unk"
-                : CloudBase.Value.Value.ToString();
+                : CloudBase.Value.ToString();
         return result;
     }
 }
