@@ -1,5 +1,6 @@
 ﻿using MobWx.Lib.ForecastModels;
-using MobWx.Lib.Models;
+using MobWx.Lib.Models.Geocoding;
+using MobWx.Lib.Models.Nws;
 using MobWx.Lib.NwsAlertModels;
 using MobWx.Lib.PointModels;
 
@@ -13,5 +14,6 @@ namespace MobWx.API.Common
         ForecastResponse? TryDeserializeForecastResponse(string forecastResponseJson);
         Observation? TryDeserializeObservation(string jsonString);
         PointsResponse? TryDeserializePointsResponse(string jsonString);
+        GeocodeResponse? TryDeserializeGeocodeResponse(string geoJsonData);
     }
 }

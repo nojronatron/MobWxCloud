@@ -1,18 +1,30 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MobWx.Lib.Models
+namespace MobWx.Lib.Models;
+
+public class QuantitativeValue
 {
-    public class QuantitativeValue : Measurement
+    [JsonPropertyName("value")]
+    public double? Value { get; set; }
+
+    [JsonPropertyName("maxValue")]
+    public double? MaxValue { get; set; }
+
+    [JsonPropertyName("minValue")]
+    public double? MinValue { get; set; }
+
+    [JsonPropertyName("unitCode")]
+    public string UnitCode { get; set; } = string.Empty;
+
+    [JsonPropertyName("qualityControl")]
+    public string QualityControl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Print Value as a string, or an empty string if Value is null.
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
     {
-        [JsonPropertyName("maxValue")]
-        public double? MaxValue { get; set; }
-
-        [JsonPropertyName("minValue")]
-        new public double? MinValue { get; set; }
-
-        public override string ToString()
-        {
-            return Value?.ToString("F1") ?? string.Empty;
-        }
+        return Value.HasValue ? Value.Value.ToString() : string.Empty;
     }
 }

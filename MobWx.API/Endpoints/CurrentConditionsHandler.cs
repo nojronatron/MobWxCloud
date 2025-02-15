@@ -1,7 +1,7 @@
-﻿using MobWx.Lib.Models.Base;
+﻿using MobWx.API.Common;
+using MobWx.Lib.Models.Base;
 using MobWx.Lib.Models;
-using MobWx.API.Common;
-using MobWx.API.Models;
+using MobWx.Lib.Models.Nws;
 
 namespace MobWx.API.Endpoints;
 
