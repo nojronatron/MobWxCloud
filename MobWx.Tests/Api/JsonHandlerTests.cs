@@ -1,13 +1,7 @@
 using Microsoft.Extensions.Logging;
 using MobWx.API.Common;
-using MobWx.Lib.ForecastModels;
-using MobWx.Lib.Models;
-using MobWx.Lib.NwsAlertModels;
-using MobWx.Lib.PointModels;
 using MobWx.Tests.Api.TestFiles;
 using Moq;
-using System.Text.Json;
-using Xunit;
 
 namespace MobWx.Tests.API;
 
@@ -106,7 +100,7 @@ public class JsonHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal("POINT(-122.6 45.6)", result.PointLocation);
+        Assert.Equal("POINT(-122.6 45.6)", result.Geometry);
         Assert.Equal("https://api.weather.gov/stations/KPDX", result.Station);
         DateTime? parsedDateTime = DateTime.Parse("2025-02-08T15:53:00+00:00");
         Assert.Equal(parsedDateTime, result.Timestamp);
@@ -123,7 +117,7 @@ public class JsonHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Null(result.PointLocation);
+        Assert.Null(result.Geometry);
         Assert.Empty(result.Station);
         Assert.Null(result.Timestamp);
         Assert.Empty(result.TextDescription);
