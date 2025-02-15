@@ -1,6 +1,6 @@
 ﻿using MobWx.Lib.ForecastModels;
-using MobWx.Lib.Models;
 using MobWx.Lib.Models.Geocoding;
+using MobWx.Lib.Models.Nws;
 using MobWx.Lib.NwsAlertModels;
 using MobWx.Lib.PointModels;
 using System.Text.Json;

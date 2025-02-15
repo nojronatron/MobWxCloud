@@ -1,4 +1,4 @@
-using MobWx.Lib.Models;
+using MobWx.Lib.Models.Nws;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

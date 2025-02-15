@@ -1,7 +1,7 @@
 using MobWx.Lib.Models;
-using MobWx.API.Models;
 using MobWx.Lib.Helpers;
 using MobWx.Lib.Enums;
+using MobWx.Lib.Models.Nws;
 
 namespace MobWx.Tests.Api;
 
@@ -13,28 +13,33 @@ public class CurrentObservationTests
         // Arrange
         var observation = new Observation
         {
+            Id = "TestId",
+            Geometry = "Point(-123.45, 45.678)",
+            StationElevationM = new QuantitativeValue { Value=100 },
             Station = "TestStation",
             Timestamp = new DateTime(2025, 1, 31, 3, 53, 0),
             RawMessage = "Test raw message",
             TextDescription = "Cloudy",
             Icon = "http://example.com/icon.png",
-            Temperature = new QuantitativeValue { Value = 7.8, UnitCode = "wmoUnit:degC" },
-            Dewpoint = new QuantitativeValue { Value = -5, UnitCode = "wmoUnit:degC" },
+            TemperatureC = new QuantitativeValue { Value = 7.8, UnitCode = "wmoUnit:degC" },
+            DewpointC = new QuantitativeValue { Value = -5, UnitCode = "wmoUnit:degC" },
             WindDirection = new QuantitativeValue { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
-            WindSpeed = new QuantitativeValue { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
-            WindGust = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:km_h-1" },
-            BarometricPressureHpa = new QuantitativeValue { Value = 101860, UnitCode = "wmoUnit:Pa" },
-            Visibility = new QuantitativeValue { Value = 16090, UnitCode = "wmoUnit:m" },
-            MaxTemperatureLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
-            MinTemperatureLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
-            PrecipitationLastHour = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:mm" },
-            WindChill = new QuantitativeValue { Value = 4.8, UnitCode = "wmoUnit:degC" },
-            HeatIndex = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+            WindSpeedKph = new QuantitativeValue { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
+            WindGustKph = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:km_h-1" },
+            BarometricPressurePa = new QuantitativeValue { Value = 101860, UnitCode = "wmoUnit:Pa" },
+            VisibilityM = new QuantitativeValue { Value = 16090, UnitCode = "wmoUnit:m" },
+            MaxTempCLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+            MinTempCLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+            PrecipitationLastHourMm = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:mm" },
+            RhPercent = new QuantitativeValue { Value = 80, UnitCode = "wmoUnit:percent" },
+            WindChillC = new QuantitativeValue { Value = 4.8, UnitCode = "wmoUnit:degC" },
+            HeatIndexC = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+
             CloudLayers =
             [
                 new CloudLayer
                 {
-                    CloudBase = new QuantitativeValue { Value = 2740, UnitCode = "wmoUnit:m" },
+                    CloudBaseM = new QuantitativeValue { Value = 2740, UnitCode = "wmoUnit:m" },
                     Amount = Amount.OVC
                 }
             ]
@@ -45,7 +50,7 @@ public class CurrentObservationTests
 
         // Assert
         Assert.NotNull(currentObservation);
-        Assert.Equal("TestStation", currentObservation.Station);
+        Assert.Equal("TestStation", currentObservation.StationUri);
         Assert.Equal(new DateTime(2025, 1, 31, 3, 53, 0), currentObservation.Timestamp);
         Assert.Equal("Test raw message", currentObservation.RawMessage);
         Assert.Equal("Cloudy", currentObservation.Description);
@@ -109,7 +114,7 @@ public class CurrentObservationTests
     public void ToMiles_ShouldConvertKilometersToMiles(int kilometers, int expectedMiles)
     {
         // Act
-        var result = UnitConverter.ToVisibleMiles(kilometers);
+        var result = UnitConverter.ToMiles(kilometers);
 
         // Assert
         Assert.Equal(expectedMiles, result);
@@ -167,7 +172,7 @@ public class CurrentObservationTests
     public void ToInches_ShouldConvertMillimetersToInches(int millimeters, int expectedInches)
     {
         // Act
-        var result = UnitConverter.ToInchesPrecip(millimeters);
+        var result = UnitConverter.ToInches(millimeters);
 
         // Assert
         Assert.Equal(expectedInches, result);

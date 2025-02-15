@@ -1,10 +1,13 @@
-﻿namespace MobWx.API.Models;
+﻿namespace MobWx.Lib.Models.Nws;
 
+/// <summary>
+/// Represent the current observation from a weather station, sent as a Json Response by the API.
+/// </summary>
 public partial class CurrentObservation
 {
-    public string? Location { get; set; }
+    public string? StationLocation { get; set; }
     public double? StationElevation { get; set; }
-    public string Station { get; set; } = string.Empty;
+    public string StationUri { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; }
     public string RawMessage { get; set; } = string.Empty; // could be METAR
     public string Description { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿namespace MobWx.API.Models;
+﻿namespace MobWx.Lib.Models.Nws;
 
 public class SimpleCloudLayer
 {

@@ -1,36 +1,35 @@
-﻿using MobWx.Lib.Models;
+﻿using MobWx.Lib.Helpers;
 using MobWx.Lib.Models.QVModels;
-using MobWx.Lib.Helpers;
 
-namespace MobWx.API.Models;
+namespace MobWx.Lib.Models.Nws;
 
 public partial class CurrentObservation
 {
     public static CurrentObservation Create(Observation observation)
     {
-        int? temperatureC = observation.Temperature?.ToNullableInt();
+        int? temperatureC = observation.TemperatureC?.ToNullableInt();
         int? temperatureF = temperatureC is not null
             ? UnitConverter.ToFarenheit(temperatureC.Value)
             : null;
 
-        int? dewpointC = observation.Dewpoint?.ToNullableInt();
+        int? dewpointC = observation.DewpointC?.ToNullableInt();
         int? dewpointF = dewpointC is not null
             ? UnitConverter.ToFarenheit(dewpointC.Value)
             : null;
 
         int? windDirection = observation.WindDirection?.ToNullableInt();
 
-        int? windSpeedKph = observation.WindSpeed?.ToNullableInt();
+        int? windSpeedKph = observation.WindSpeedKph?.ToNullableInt();
         int? windSpeedMph = windSpeedKph is not null
             ? UnitConverter.ToMilesPerHour(windSpeedKph.Value)
             : null;
 
-        int? windGustKph = observation.WindGust?.ToNullableInt();
+        int? windGustKph = observation.WindGustKph?.ToNullableInt();
         int? windGustMph = windGustKph is not null
             ? UnitConverter.ToMilesPerHour(windGustKph.Value)
             : null;
 
-        int? pressureHpa = observation.BarometricPressureHpa?.ToNullableInt();
+        int? pressureHpa = observation.BarometricPressurePa?.ToNullableInt();
         double? pressureMb = pressureHpa is not null
             ? UnitConverter.ToMillibars(pressureHpa.Value)
             : null;
@@ -38,31 +37,31 @@ public partial class CurrentObservation
             ? UnitConverter.ToInchesMercury(pressureHpa.Value)
             : null;
 
-        int? visibilityM = observation.Visibility?.ToNullableInt();
+        int? visibilityM = observation.VisibilityM?.ToNullableInt();
         int? visibilityMi = visibilityM is not null
-            ? UnitConverter.ToVisibleMiles(visibilityM.Value)
+            ? UnitConverter.ToMiles(visibilityM.Value)
             : null;
 
-        int? maxTemperatureC = observation.MaxTemperatureLast24Hours?.ToNullableInt();
+        int? maxTemperatureC = observation.MaxTempCLast24Hours?.ToNullableInt();
         int? maxTemperatureF = maxTemperatureC is not null
             ? UnitConverter.ToFarenheit(maxTemperatureC.Value)
             : null;
-        int? minTemperatureC = observation.MinTemperatureLast24Hours?.ToNullableInt();
+        int? minTemperatureC = observation.MinTempCLast24Hours?.ToNullableInt();
         int? minTemperatureF = minTemperatureC is not null
             ? UnitConverter.ToFarenheit(minTemperatureC.Value)
             : null;
 
-        int? precipitationMmHr = observation.PrecipitationLastHour?.ToNullableInt();
+        int? precipitationMmHr = observation.PrecipitationLastHourMm?.ToNullableInt();
         double? precipitationInchesHour = precipitationMmHr is not null
-            ? UnitConverter.ToInchesPrecip(precipitationMmHr.Value)
+            ? UnitConverter.ToInches(precipitationMmHr.Value)
             : null;
 
-        int? windChillC = observation.WindChill?.ToNullableInt();
+        int? windChillC = observation.WindChillC?.ToNullableInt();
         int? windChillF = windChillC is not null
             ? UnitConverter.ToFarenheit(windChillC.Value)
             : null;
 
-        int? heatIndexC = observation.HeatIndex?.ToNullableInt();
+        int? heatIndexC = observation.HeatIndexC?.ToNullableInt();
         int? heatIndexF = heatIndexC is not null
             ? UnitConverter.ToFarenheit(heatIndexC.Value)
             : null;
@@ -80,7 +79,7 @@ public partial class CurrentObservation
                     SimpleCloudLayers
                         .Add(new SimpleCloudLayer
                         {
-                            HeightMeters = cloudLayer.CloudBase?.ToString() ?? null,
+                            HeightMeters = cloudLayer.CloudBaseM?.ToString() ?? null,
                             Description = clAmount
                         });
                 }
@@ -89,9 +88,9 @@ public partial class CurrentObservation
 
         return new CurrentObservation
         {
-            Location = observation.PointLocation,
-            StationElevation = observation.StationElevation?.ToNullableDouble(),
-            Station = observation.Station ?? string.Empty,
+            StationLocation = observation.Geometry,
+            StationElevation = observation.StationElevationM?.ToNullableDouble(),
+            StationUri = observation.Station ?? string.Empty,
             Timestamp = observation.Timestamp ?? DateTime.MinValue,
             RawMessage = observation.RawMessage ?? string.Empty,
             Description = observation.TextDescription ?? string.Empty,
@@ -115,7 +114,7 @@ public partial class CurrentObservation
             MinTemperatureF = minTemperatureF,
             PrecipitationMmHr = precipitationMmHr,
             PrecipitationInchHr = precipitationInchesHour,
-            RelativeHumidity = observation.RelativeHumidity?.ToNullableInt(),
+            RelativeHumidity = observation.RhPercent?.ToNullableInt(),
             WindChillC = windChillC,
             WindChillF = windChillF,
             HeatIndexC = heatIndexC,
