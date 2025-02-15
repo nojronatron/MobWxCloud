@@ -19,24 +19,24 @@ namespace MobWx.Tests.Library
                 RawMessage = "Test raw message",
                 TextDescription = "Cloudy",
                 Icon = "http://example.com/icon.png",
-                Temperature = new Temperature { Value = 7.8, UnitCode = "wmoUnit:degC" },
-                Dewpoint = new Dewpoint { Value = -1.1, UnitCode = "wmoUnit:degC" },
-                WindDirection = new WindDirection { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
-                WindSpeed = new WindSpeed { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
-                WindGust = new WindGust { Value = null, UnitCode = "wmoUnit:km_h-1" },
-                BarometricPressureHpa = new BarometricPressure { Value = 101860, UnitCode = "wmoUnit:Pa" },
-                Visibility = new Visibility { Value = 16090, UnitCode = "wmoUnit:m" },
-                MaxTemperatureLast24Hours = new MaxTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
-                MinTemperatureLast24Hours = new MinTemperatureLast24Hours { Value = null, UnitCode = "wmoUnit:degC" },
-                PrecipitationLastHour = new PrecipitationLastHour { Value = null, UnitCode = "wmoUnit:mm" },
-                RelativeHumidity = new Rh { Value = 93, UnitCode = "wmoUnit:percent" },
-                WindChill = new WindChill { Value = 4.8, UnitCode = "wmoUnit:degC" },
-                HeatIndex = new HeatIndex { Value = null, UnitCode = "wmoUnit:degC" },
+                Temperature = new QuantitativeValue { Value = 7.8, UnitCode = "wmoUnit:degC" },
+                Dewpoint = new QuantitativeValue { Value = -1.1, UnitCode = "wmoUnit:degC" },
+                WindDirection = new QuantitativeValue { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
+                WindSpeed = new QuantitativeValue { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
+                WindGust = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:km_h-1" },
+                BarometricPressureHpa = new QuantitativeValue { Value = 101860, UnitCode = "wmoUnit:Pa" },
+                Visibility = new QuantitativeValue { Value = 16090, UnitCode = "wmoUnit:m" },
+                MaxTemperatureLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+                MinTemperatureLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
+                PrecipitationLastHour = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:mm" },
+                RelativeHumidity = new QuantitativeValue { Value = 93, UnitCode = "wmoUnit:percent" },
+                WindChill = new QuantitativeValue { Value = 4.8, UnitCode = "wmoUnit:degC" },
+                HeatIndex = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
                 CloudLayers = new List<CloudLayer>
                 {
                     new CloudLayer
                     {
-                        CloudBase = new MeasurementInt { Value = 2740, UnitCode = "wmoUnit:m" },
+                        CloudBase = new QuantitativeValue { Value = 2740, UnitCode = "wmoUnit:m" },
                         Amount = Amount.OVC
                     }
                 }

@@ -1,6 +1,9 @@
 ﻿namespace MobWx.Lib.Models;
 
-public class Elevation : Measurement
+/// <summary>
+/// NWS API returns Elevation as unit Meters (m) (as a Double value type???)
+/// </summary>
+public class Elevation : QuantitativeValue
 {
    public override string ToString()
     {
