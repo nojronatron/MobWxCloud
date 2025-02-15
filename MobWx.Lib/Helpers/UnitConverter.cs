@@ -9,7 +9,7 @@ public class UnitConverter
         return (int)Math.Round((celsius * mult + offset));
     }
 
-    public static int ToVisibleMiles(int meters)
+    public static int ToMiles(int meters)
     {
         double mult = 0.000621371;
         return (int)Math.Round((meters * mult), 0);
@@ -35,7 +35,7 @@ public class UnitConverter
         return Math.Round(pascals * mult, 1);
     }
 
-    public static int ToInchesPrecip(int millimeters)
+    public static int ToInches(int millimeters)
     {
         double mult = 0.0393700787;
         return (int)Math.Round(millimeters * mult);
