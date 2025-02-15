@@ -1,12 +1,12 @@
-﻿namespace MobWx.Lib.Models;
-
-using MobWx.Lib.Enums;
+﻿using MobWx.Lib.Enums;
 using System.Text.Json.Serialization;
+
+namespace MobWx.Lib.Models.Nws;
 
 public class CloudLayer
 {
     [JsonPropertyName("base")]
-    public QuantitativeValue? CloudBase { get; set; }
+    public QuantitativeValue? CloudBaseM { get; set; }
 
     [JsonPropertyName("amount")]
     public Amount? Amount { get; set; }
@@ -16,13 +16,13 @@ public class CloudLayer
         string result = string.Empty;
         result += Amount is null
             ? "unk"
-            : ((Amount).ToString());
+            : Amount.ToString();
         result += ", ";
-        result += CloudBase is null
+        result += CloudBaseM is null
             ? "unk"
-            : CloudBase.Value is null
+            : CloudBaseM.Value is null
                 ? "unk"
-                : CloudBase.Value.ToString();
+                : CloudBaseM.Value.ToString();
         return result;
     }
 }

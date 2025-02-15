@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace MobWx.Lib.Models;
+namespace MobWx.Lib.Models.Nws;
 
 public partial class Observation
 {
@@ -15,20 +15,20 @@ public partial class Observation
         result.AppendLine($"Raw Message: {RawMessage}");
         result.AppendLine($"Text Description: {TextDescription}");
         result.AppendLine($"Icon: {Icon}");
-        result.AppendLine($"Temperature: {Temperature}");
-        result.AppendLine($"Dewpoint: {Dewpoint}");
+        result.AppendLine($"Temperature: {TemperatureC}");
+        result.AppendLine($"Dewpoint: {DewpointC}");
         result.AppendLine($"Wind Direction: {WindDirection}");
-        result.AppendLine($"Wind Speed: {WindSpeed}");
-        result.AppendLine($"Wind Gust: {WindGust}");
-        result.AppendLine($"Barometric Pressure: {BarometricPressureHpa}");
-        result.AppendLine($"Visibility: {Visibility}");
-        result.AppendLine($"Max Temp Last 24 Hours: {MaxTemperatureLast24Hours}");
-        result.AppendLine($"Min Temp Last 24 Hours: {MinTemperatureLast24Hours}");
-        result.AppendLine($"Precipitation Last Hour: {PrecipitationLastHour}");
-        result.AppendLine($"Rh: {RelativeHumidity}");
-        result.AppendLine($"Wind Chill: {WindChill}");
-        result.AppendLine($"Heat Index: {HeatIndex}");
-        
+        result.AppendLine($"Wind Speed: {WindSpeedKph}");
+        result.AppendLine($"Wind Gust: {WindGustKph}");
+        result.AppendLine($"Barometric Pressure: {BarometricPressurePa}");
+        result.AppendLine($"Visibility: {VisibilityM}");
+        result.AppendLine($"Max Temp Last 24 Hours: {MaxTempCLast24Hours}");
+        result.AppendLine($"Min Temp Last 24 Hours: {MinTempCLast24Hours}");
+        result.AppendLine($"Precipitation Last Hour: {PrecipitationLastHourMm}");
+        result.AppendLine($"Rh: {RhPercent}");
+        result.AppendLine($"Wind Chill: {WindChillC}");
+        result.AppendLine($"Heat Index: {HeatIndexC}");
+
         if (CloudLayers is not null && CloudLayers.Count > 0)
         {
             result.AppendLine("Cloud Layers:");

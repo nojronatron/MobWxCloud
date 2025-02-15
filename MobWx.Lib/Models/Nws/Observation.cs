@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MobWx.Lib.Models;
+namespace MobWx.Lib.Models.Nws;
 
 public partial class Observation
 {
@@ -8,10 +8,10 @@ public partial class Observation
     public string Id { get; set; } = string.Empty;
 
     [JsonPropertyName("geometry")]
-    public string? PointLocation { get; set; } // note long before lat: "POINT(-123.45 67.89)"
+    public string? Geometry { get; set; } // nwsapi doc is wrong this is a string
 
     [JsonPropertyName("elevation")]
-    public Elevation? StationElevation { get; set; } // elevation of the obs station om meters
+    public QuantitativeValue? StationElevationM { get; set; } // elevation of the obs station om meters
 
     [JsonPropertyName("station")]
     public string Station { get; set; } = string.Empty; // api.weather.gov/stations/{station}
@@ -29,43 +29,43 @@ public partial class Observation
     public string Icon { get; set; } = string.Empty; // api.weather.gov/icons/{area}/{dayNite}/{sky}?size={size}
 
     [JsonPropertyName("temperature")]
-    public QuantitativeValue? Temperature { get; set; }
+    public QuantitativeValue? TemperatureC { get; set; }
 
     [JsonPropertyName("dewpoint")]
-    public QuantitativeValue? Dewpoint { get; set; }
+    public QuantitativeValue? DewpointC { get; set; }
 
     [JsonPropertyName("windDirection")]
     public QuantitativeValue? WindDirection { get; set; }
 
     [JsonPropertyName("windSpeed")]
-    public QuantitativeValue? WindSpeed { get; set; }
+    public QuantitativeValue? WindSpeedKph { get; set; }
 
     [JsonPropertyName("windGust")]
-    public QuantitativeValue? WindGust { get; set; }
+    public QuantitativeValue? WindGustKph { get; set; }
 
     [JsonPropertyName("barometricPressure")]
-    public QuantitativeValue? BarometricPressureHpa { get; set; }
+    public QuantitativeValue? BarometricPressurePa { get; set; }
 
     [JsonPropertyName("visibility")]
-    public QuantitativeValue? Visibility { get; set; }
+    public QuantitativeValue? VisibilityM { get; set; }
 
     [JsonPropertyName("maxTemperatureLast24Hours")]
-    public QuantitativeValue? MaxTemperatureLast24Hours { get; set; }
+    public QuantitativeValue? MaxTempCLast24Hours { get; set; }
 
     [JsonPropertyName("minTemperatureLast24Hours")]
-    public QuantitativeValue? MinTemperatureLast24Hours { get; set; }
+    public QuantitativeValue? MinTempCLast24Hours { get; set; }
 
     [JsonPropertyName("precipitationLastHour")]
-    public QuantitativeValue? PrecipitationLastHour { get; set; }
+    public QuantitativeValue? PrecipitationLastHourMm { get; set; }
 
     [JsonPropertyName("relativeHumidity")]
-    public QuantitativeValue? RelativeHumidity { get; set; }
+    public QuantitativeValue? RhPercent { get; set; }
 
     [JsonPropertyName("windChill")]
-    public QuantitativeValue? WindChill { get; set; }
+    public QuantitativeValue? WindChillC { get; set; }
 
     [JsonPropertyName("heatIndex")]
-    public QuantitativeValue? HeatIndex { get; set; }
+    public QuantitativeValue? HeatIndexC { get; set; }
 
     [JsonPropertyName("cloudLayers")]
     public List<CloudLayer>? CloudLayers { get; set; }
