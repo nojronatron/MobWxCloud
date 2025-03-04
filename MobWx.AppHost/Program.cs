@@ -2,9 +2,14 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var web = builder.AddProject<Projects.MobWx_Web>("web")
-    .WithHttpHealthCheck("/health");
+var mobwxapi = builder.AddProject<Projects.MobWx_API>("mobwxapi");
 
-builder.AddProject<Projects.MobWx_API>("mobwx-api");
+// ensure health check is available, allow external facing endpoints, and enable service discovery
+var mobwxweb = builder.AddProject<Projects.MobWx_Web>("mobwxweb")
+    .WithHttpHealthCheck("/health")
+    .WithExternalHttpEndpoints()
+    .WithReference(mobwxapi);
+
+// adds services__api__http__0 (and https version) environment variable values to the service discovery
 
 builder.Build().Run();
