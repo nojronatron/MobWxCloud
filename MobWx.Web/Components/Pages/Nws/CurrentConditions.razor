@@ -1,0 +1,86 @@
+﻿@using MobWx.Lib.Models.Nws
+
+<img src="@currentObservation.IconUrl"
+alt="@ImageAltText"
+width="100" />
+
+<p>Temperature: @currentObservation.TemperatureF</p>
+<p>Relative Humidity: @(currentObservation.RelativeHumidity)%</p>
+<p>Winds: @(currentObservation.WindDirection) degrees at @(currentObservation.WindSpeedMph) mph
+    @if (@currentObservation.WindGustMph is not null && currentObservation.WindGustMph > 0)
+    {
+        <span> gusting @currentObservation.WindGustMph</span>
+    }
+</p>
+
+<p>Wind Chill: 
+    @if (currentObservation.WindChillF is not null)
+    {
+        @currentObservation.WindChillF.Value
+    }
+    else
+    {
+        <span> (not reported)</span>
+    }
+</p>
+
+<p>Dewpoint (F): 
+    @if(currentObservation.DewpointF is not null)
+    {
+        <span>@currentObservation.DewpointF.Value</span>
+    }
+    else
+    {
+        <span> (not reported)</span>
+    }
+</p>
+
+<p>Precipitation last hour: 
+    @if (@currentObservation.PrecipitationInchHr is not null)
+    {
+        <span>@currentObservation.PrecipitationInchHr</span>
+        <span> inches per hour</span>
+    }
+    else
+    {
+        <span> (not reported)</span>
+    }
+</p>
+
+<p>Pressure (inHG): @(currentObservation.PressureIn)</p>
+
+@if(@currentObservation.VisibilityMiles is not null)
+{
+    <p>Visibility: @(currentObservation.VisibilityMiles) miles</p>
+}
+
+@if(currentObservation.CloudLayers is not null && currentObservation.CloudLayers.Count > 0)
+{
+    <h6>Cloud Layers (type and elevation in feet)</h6>
+
+    @foreach (var cloudLayer in currentObservation.CloudLayers)
+    {
+        @if (cloudLayer.Description == "CLR")
+        {
+            <li>Clear skies</li>
+        }
+        else
+        {
+            <li>@cloudLayer.Description at @cloudLayer.HeightFeet</li>
+        }
+    }
+}
+else
+{
+    <p>No current sky/cloud report.</p>
+}
+
+@code {
+    [Parameter]
+    public CurrentObservation currentObservation { get; set; }
+
+    private string ImageAltText =>
+        string.IsNullOrWhiteSpace(currentObservation.IconUrl)
+            ? "Current weather condition icon."
+            : $"{currentObservation.IconUrl.Split("/")[5]}: {currentObservation.IconUrl.Split("/")[6]}";
+}
