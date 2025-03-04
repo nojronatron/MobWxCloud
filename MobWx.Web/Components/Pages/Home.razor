@@ -1,7 +1,277 @@
 ﻿@page "/"
+@using MobWx.Lib.ForecastModels
+@using MobWx.Lib.Models.Forms
+@using MobWx.Lib.Models.Geocoding
+@using MobWx.Lib.Models.Nws
+@using MobWx.Lib.NwsAlertModels
+@using MobWx.Web.Components.Pages.Nws
+@using System.Text.Json
+@using MobWx.Web.Models
+@inject ILogger<Home> logger
+@inject IHttpClientFactory httpClient
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<PageTitle>MobWx Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (hasLocation)
+{
+    <h1>Change Location</h1>
+}
+else
+{
+    <h1>Set A Location</h1>
+}
 
-Welcome to your new app.
+<EditForm Model="CityState" FormName="GetCityStateForm">
+    <InputText @bind-Value="CityState.City" />
+    <InputText @bind-Value="CityState.State" />
+    <button type="submit" class="btn btn-primary" @onclick="OnSubmitLocation">Get Weather</button>
+</EditForm>
+
+@if (@AlertsAvailable)
+{
+    <h3>Current Watches, Warnings, and Advisories (@ActiveAlerts.Count)</h3>
+    <p>Late updated: @ActiveAlerts.AlertUpdateTimestamp</p>
+    <ActiveAlertsList activeAlerts="ActiveAlerts" />
+}
+
+@if (hasCurrentConditions)
+{
+    <h3>Current Conditions at @Location.City, @Location.State</h3>
+    <CurrentConditions currentObservation="@CurrentObservation" />
+}
+
+@if(hasForecasts)
+{
+    <h3>7-Day Forecast Overview</h3>
+    <ForecastsList ForecastList="@ForecastResponse" />
+}
+
+@code {
+    [SupplyParameterFromForm]
+    public CityStateModel CityState { get; set; } = new();
+
+    public LocationViewModel? Location { get; set; }
+    public CurrentObservation? CurrentObservation;
+    public ForecastResponse? ForecastResponse;
+    public ActiveAlerts? ActiveAlerts;
+
+    string errorMessage { get; set; } = string.Empty;
+
+    private bool hasLocation { get; set; } = false;
+    private bool hasCurrentConditions { get; set; } = false;
+    private bool hasForecasts { get; set; } = false;
+    private bool hasAlerts { get; set; } = false;
+    private bool hasError { get; set; } = false;
+
+    private CancellationTokenSource cts = new(
+        TimeSpan.FromMilliseconds(500)
+    );
+
+    private JsonSerializerOptions jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    private bool AlertsAvailable =>
+        ActiveAlerts is not null && ActiveAlerts.Count > 0;
+
+    public async Task OnSubmitLocation()
+    {
+        logger.LogInformation("Entered OnSubmitLocation handler.");
+        await GetGeoLocation();
+        await GetCurrentConditions();
+        await GetAlerts();
+        await GetForecast();
+        logger.LogInformation("Exiting OnSubmitLocation handler.");
+    }
+
+    public async Task GetForecast()
+    {
+        logger.LogInformation("Entered Get Forecast handler.");
+        var client = httpClient.CreateClient("mobwxapi");
+        var relativeUri = $"/api/v1/forecast/{Location.Latitude},{Location.Longitude}";
+        logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
+
+        var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            relativeUri
+        );
+
+        ForecastResponse? result = new();
+
+        try
+        {
+            var response = await client.SendAsync(request);
+
+            if(response.IsSuccessStatusCode)
+            {
+                var document = await response.Content.ReadAsStringAsync(cts.Token);
+                result = JsonSerializer.Deserialize<ForecastResponse>(document, jsonOptions);
+                logger.LogInformation("Forecast data deserialized without error.");
+                hasForecasts = true;
+                errorMessage = string.Empty;
+                hasError = false;
+                ForecastResponse = result;
+            }
+            else
+            {
+                logger.LogWarning("Forecast http GET failed with code {code}", response.StatusCode);
+                hasForecasts = false;
+                errorMessage = "An unexpected error occurred, try again later.";
+                hasError = true;
+                ForecastResponse = null;
+            }
+        }
+        catch (JsonException ex)
+        {
+            logger.LogError("An exception was caught: {message} {stacktrace}", ex.Message, ex.StackTrace);
+            hasForecasts = false;
+            errorMessage = "An unexpected error occurred, try again later or use a different city, state.";
+            hasError = true;
+            ForecastResponse = null;
+        }
+    }
+
+    public async Task GetAlerts()
+    {
+        logger.LogInformation("Entered Get Alerts handler.");
+        var client = httpClient.CreateClient("mobwxapi");
+        var relativeUri = $"/api/v1/alerts/{Location.Latitude},{Location.Longitude}";
+        logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
+
+        var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            relativeUri
+        );
+
+        ActiveAlerts? result = new();
+
+        try
+        {
+            var response = await client.SendAsync(request);
+
+            if(response.IsSuccessStatusCode)
+            {
+                var document = await response.Content.ReadAsStringAsync(cts.Token);
+                result = JsonSerializer.Deserialize<ActiveAlerts>(document, jsonOptions);
+                logger.LogInformation("Alerts data deserialized without error.");
+                hasAlerts = true;
+                errorMessage = string.Empty;
+                hasError = false;
+                ActiveAlerts = result;
+            }
+            else
+            {
+                logger.LogWarning("Alerts http GET failed with code {code}", response.StatusCode);
+                hasAlerts = false;
+                errorMessage = "An unexpected error occurred, try again later.";
+                hasError = true;
+                ActiveAlerts = null;
+            }
+        }
+        catch (JsonException ex)
+        {
+            logger.LogError("An exception was caught: {message} {stacktrace}", ex.Message, ex.StackTrace);
+            hasAlerts = false;
+            errorMessage = "An unexpected error occurred, try again later or use a different city, state.";
+            hasError = true;
+            ActiveAlerts = null;
+        }
+    }
+
+    public async Task GetCurrentConditions()
+    {
+        logger.LogInformation("Entered Get Current Conditions handler.");
+        var client = httpClient.CreateClient("mobwxapi");
+        var relativeUri = $"/api/v1/conditions/{Location.Latitude},{Location.Longitude}";
+        logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
+
+        var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            relativeUri
+        );
+
+        try
+        {
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var document = await response.Content.ReadAsStringAsync(cts.Token);
+                var result = JsonSerializer.Deserialize<CurrentObservation>(document, jsonOptions);
+                logger.LogInformation("Current conditions data received: {station}, {description}", result.StationLocation, result.Description);
+                hasCurrentConditions = true;
+                errorMessage = string.Empty;
+                hasError = false;
+                CurrentObservation = result;
+            }
+            else
+            {
+                logger.LogWarning("Current conditions http GET failed with code {code}", response.StatusCode);
+                hasCurrentConditions = false;
+                errorMessage = "An unexpected error occurred, try again later.";
+                hasError = true;
+                Location = null;
+                CurrentObservation = null;
+            }
+
+            logger.LogInformation("Exiting Get Current Conditions handler.");
+        }
+        catch (JsonException ex)
+        {
+            logger.LogError("An exception was caught: {message} {stacktrace}", ex.Message, ex.StackTrace);
+            hasCurrentConditions = false;
+            errorMessage = "An unexpected error occurred, try again later or use a different city, state.";
+            hasError = true;
+            CurrentObservation = null;
+        }
+    }
+
+    public async Task GetGeoLocation()
+    {
+        logger.LogInformation("Entered Get Geolocation handler.");
+        var client = httpClient.CreateClient("mobwxapi");
+        var relativeUri = $"api/v1/location/{CityState.City},{CityState.State}";
+        logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
+
+        var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            relativeUri
+        );
+
+        try
+        {
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var document = await response.Content.ReadAsStringAsync(cts.Token);
+                var result = JsonSerializer.Deserialize<LocationViewModel>(document, jsonOptions);
+                logger.LogInformation("Location data received: ({lattitude}, {longitude})", result.Latitude, result.Longitude);
+                hasLocation = true;
+                errorMessage = string.Empty;
+                hasError = false;
+                Location = result;
+            }
+            else
+            {
+                logger.LogWarning("Geolocation http GET failed with code {code}", response.StatusCode);
+                hasLocation = false;
+                errorMessage = "Only US-based City and State are supported.";
+                hasError = true;
+                Location = null;
+            }
+
+            logger.LogInformation("Exiting Get Geolocation handler.");
+        }
+        catch (JsonException ex)
+        {
+            logger.LogError("An exception was caught: {message} {stacktrace}", ex.Message, ex.StackTrace);
+            hasLocation = false;
+            errorMessage = "An unexpected error occurred, try again later or use a different city, state.";
+            hasError = true;
+            Location = null;
+        }
+    }
+}

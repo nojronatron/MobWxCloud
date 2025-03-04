@@ -4,13 +4,13 @@ namespace MobWx.Lib.Models;
 
 public class Coordinate : IEquatable<Coordinate>
 {
-    public Latitude? Lat { get; set; }
-    public Longitude? Lon { get; set; }
+    public double? Lat { get; set; }
+    public double? Lon { get; set; }
 
     public Coordinate(double lat, double lon)
     {
-        Lat = new Latitude { Value = lat };
-        Lon = new Longitude { Value = lon };
+        Lat = lat;
+        Lon = lon;
     }
 
     /// <summary>
@@ -24,7 +24,7 @@ public class Coordinate : IEquatable<Coordinate>
             return new NullPosition();
         }
 
-        return new Position(Lat.GetValue().ToString(), Lon.GetValue().ToString());
+        return new Position(Lat.ToString(), Lon.ToString());
     }
 
     /// <summary>
@@ -92,44 +92,6 @@ public class Coordinate : IEquatable<Coordinate>
     /// <returns></returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Lat?.Value, Lon?.Value);
-    }
-}
-
-public class Latitude
-{
-    public const double MaxValue = 90.0;
-    public double Value { get; set; }
-
-    public double GetValue()
-    {
-        int sign = Value < 0 ? -1 : 1;
-        double currVal = Math.Abs(Value);
-
-        while (currVal > MaxValue)
-        {
-            currVal -= MaxValue;
-        }
-
-        return sign * currVal;
-    }
-}
-
-public class Longitude
-{
-    public const double MaxValue = 180.0;
-    public double Value { get; set; }
-
-    public double GetValue()
-    {
-        int sign = Value < 0 ? -1 : 1;
-        double currVal = Math.Abs(Value);
-
-        while (currVal > MaxValue)
-        {
-            currVal -= MaxValue;
-        }
-
-        return sign * currVal;
+        return HashCode.Combine(Lat, Lon);
     }
 }

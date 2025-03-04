@@ -28,11 +28,13 @@ using Microsoft.EntityFrameworkCore;
 using MobWx.Web.Components;
 using MobWx.Web.Components.Account;
 using MobWx.Web.Data;
+using MobWx.Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // register Aspire service defaults
 builder.AddServiceDefaults();
+builder.Services.AddLogging();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -59,6 +61,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
+
+// For interactive SSR Http Client support using Service Discovery
+builder.Services.AddServiceDiscovery();
+builder.Services.AddHttpClient("mobwxapi", config =>
+    {
+        config.BaseAddress = new("https+http://mobwxapi");
+    })
+    .AddServiceDiscovery();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 

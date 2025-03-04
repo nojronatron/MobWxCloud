@@ -1,0 +1,26 @@
+﻿@using MobWx.Lib.NwsAlertModels
+
+@foreach(var alert in activeAlerts.Graph)
+{
+    <img src="/red-cloud-alert.png"
+    alt="Weather alert cloud with exclamation mark"
+    width="100" 
+    />
+    <p>@alert.Headline</p>
+    <h4>@alert.EventSubject</h4>
+    <p>@alert.Description</p>
+    @if(!string.IsNullOrWhiteSpace(@alert.Instruction))
+    {
+        <p>Instruction: @alert.Instruction </p>
+    }
+    <p>@alert.AreaDescription</p>
+    <p>Effective: @alert.Effective</p>
+    <p>Expires: @alert.Expires</p>
+    <p>@alert.Status @alert.MessageType, of @alert.Severity severity, @alert.Certainty certainty.</p>
+    <p>Response: @alert.Response</p>
+}
+
+@code {
+    [Parameter]
+    public ActiveAlerts? activeAlerts { get; set; }
+}

@@ -1,0 +1,52 @@
+﻿@using MobWx.Lib.ForecastModels
+
+@foreach(var period in ForecastList.Periods)
+{
+    <img src="@period.IconUrl" 
+    alt="@period.ShortForecast"
+    width="100"
+    />
+    <h5>@(period.Name)</h5>
+    <p>@(period.StartTime) to @(period.EndTime)</p>
+    <p>@period.ShortForecast</p>
+    <p>@period.DetailedForecast</p>
+    <p>Temp (F): @period.Temperature</p>
+
+    if (false == string.IsNullOrWhiteSpace(@period.TemperatureTrend))
+    {
+        <p>Trend: @period.TemperatureTrend</p>
+    }
+
+    if (@period.RelativeHumidity is not null && period.RelativeHumidity.Value > 0)
+    {
+        <p>RH: @period.RelativeHumidity.Value%</p>
+    }
+
+    if (@period.Dewpoint is not null)
+    {
+        <p>Dewpoint (F): @period.Dewpoint.Value</p>
+    }
+
+    <p>Probability of Precipitation: 
+    @if (period.ProbabilityOfPrecipitation is null || period.ProbabilityOfPrecipitation.Value < 21)
+    {
+        <span>Less than 20% chance of precipitation</span>
+    }
+    else
+    {
+        <span>@period.ProbabilityOfPrecipitation%</span>    
+    }
+    </p>
+
+    <p>Winds: @period.WindDirection at @period.WindSpeed</p>
+    
+    if (@period.WindGust is not null && @period.WindGust.Value > 0)
+    {
+        <p>Gusts: @period.WindGust</p>
+    }
+}
+
+@code {
+    [Parameter]
+    public ForecastResponse? ForecastList { get; set; }
+}
