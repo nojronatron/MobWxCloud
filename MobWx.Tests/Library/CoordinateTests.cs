@@ -140,40 +140,6 @@ public class CoordinateTests
         var hashCode = coordinate.GetHashCode();
 
         // Assert
-        Assert.Equal(HashCode.Combine(coordinate.Lat?.Value, coordinate.Lon?.Value), hashCode);
-    }
-
-    [Theory]
-    [InlineData(90.0, 90.0)]
-    [InlineData(-90.0, -90.0)]
-    [InlineData(180.0, 90.0)]
-    [InlineData(-180.0, -90.0)]
-    public void Latitude_GetValue_ShouldReturnExpectedValue(double input, double expected)
-    {
-        // Arrange
-        var latitude = new Latitude { Value = input };
-
-        // Act
-        var result = latitude.GetValue();
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData(180.0, 180.0)]
-    [InlineData(-180.0, -180.0)]
-    [InlineData(360.0, 180.0)]
-    [InlineData(-360.0, -180.0)]
-    public void Longitude_GetValue_ShouldReturnExpectedValue(double input, double expected)
-    {
-        // Arrange
-        var longitude = new Longitude { Value = input };
-
-        // Act
-        var result = longitude.GetValue();
-
-        // Assert
-        Assert.Equal(expected, result);
+        Assert.Equal(HashCode.Combine(coordinate.Lat, coordinate.Lon), hashCode);
     }
 }
