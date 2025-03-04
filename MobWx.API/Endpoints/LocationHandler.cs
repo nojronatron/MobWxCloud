@@ -115,7 +115,6 @@ public class LocationHandler : ILocationHandler
                 Location latLonOnly = geolocation.Features[0].Geometry!.GetLocation();
                 location.Lat = latLonOnly.Lat;
                 location.Lon = latLonOnly.Lon;
-                var output = JsonSerializer.Serialize(location, new JsonSerializerOptions { WriteIndented = true });
                 return Results.Ok(location);
             }
             catch (Exception ex)
