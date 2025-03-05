@@ -17,9 +17,9 @@ public class NominatimGeometry
     /// Get the location of the geometry
     /// </summary>
     /// <returns></returns>
-    public Location GetLocation()
+    public Coordinate GetLocation()
     {
-        return new Location(CoordinateDoubles[1], CoordinateDoubles[0]);
+        return Coordinate.Create(CoordinateDoubles[1], CoordinateDoubles[0]);
     }
 
     /// <summary>
