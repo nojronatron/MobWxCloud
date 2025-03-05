@@ -14,6 +14,6 @@ namespace MobWx.API.Common
         ForecastResponse? TryDeserializeForecastResponse(string forecastResponseJson);
         Observation? TryDeserializeObservation(string jsonString);
         PointsResponse? TryDeserializePointsResponse(string jsonString);
-        GeocodeResponse? TryDeserializeGeocodeResponse(string geoJsonData);
+        NominatimGeocodeResponse? TryDeserializeGeocodeResponse(string geoJsonData);
     }
 }

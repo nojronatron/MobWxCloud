@@ -47,12 +47,13 @@ public class JsonHandler : IJsonHandler
     /// </summary>
     /// <param name="geoJsonData"></param>
     /// <returns></returns>
-    public GeocodeResponse? TryDeserializeGeocodeResponse(string geoJsonData)
+    public NominatimGeocodeResponse? TryDeserializeGeocodeResponse(string geoJsonData)
     {
         try
         {
-            _logger.LogInformation("About to attempt deserialization of the following json string: {jsonstring}", geoJsonData);
-            return JsonSerializer.Deserialize<GeocodeResponse>(geoJsonData, _jsonOptions);
+            _logger.LogInformation("About to deserialize the following JSON string:");
+            _logger.LogInformation("{jsonstring}", geoJsonData);
+            return JsonSerializer.Deserialize<NominatimGeocodeResponse>(geoJsonData, _jsonOptions);
         }
         catch (JsonException jex)
         {
