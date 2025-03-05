@@ -1,5 +1,4 @@
-﻿using MobWx.Lib.Models.Base;
-using MobWx.Lib.Models;
+﻿using MobWx.Lib.Models;
 
 namespace MobWx.API.Common;
 
@@ -21,15 +20,14 @@ public static class NwsEndpointPaths
     /// <param name="latLon"></param>
     /// <param name="limit"></param>
     /// <returns></returns>
-    public static string PointPath(PositionBase latLon)
+    public static string PointPath(Position latLon)
     {
-        // if latLon is of type NullPosition return an empty string
-        if (latLon is NullPosition)
+        if (latLon.HasCoordinates)
         {
-            return string.Empty;
+            return $"/points/{latLon.Coordinate!.Lat},{latLon.Coordinate.Lon}";
         }
         
-        return $"/points/{latLon.Latitude},{latLon.Longitude}";
+        return string.Empty;
     }
 
     /// <summary>
@@ -37,20 +35,25 @@ public static class NwsEndpointPaths
     /// </summary>
     /// <param name="position"></param>
     /// <param name="limit"></param>
-    /// <returns></returns>
+    /// <returns>Remote API path (or empty string in method params were not valid)</returns>
     public static string GetActiveAlertPath(Position position, int? limit)
     {
-        int limitNum = 12;
-
-        if (limit is not null)
+        if (position.HasCoordinates)
         {
-            if (limit > 0 && limit <= 25)
+            int limitNum = 12;
+
+            if (limit is not null
+                && limit > 0
+                && limit <= 25
+                )
             {
                 limitNum = (int)limit;
             }
+        
+            return $"/alerts/active?point={position.Coordinate!.Lat},{position.Coordinate.Lon}&limit={limitNum}";
         }
      
-        return $"/alerts/active?point={position.Latitude},{position.Longitude}&limit={limitNum}";
+        return string.Empty;
     }
 
     /// <summary>
