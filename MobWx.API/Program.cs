@@ -23,7 +23,6 @@
 */
 
 using Microsoft.AspNetCore.Mvc;
-using MobWx.API.Common;
 using MobWx.API.Endpoints;
 using MobWx.API.ServerConfig;
 using MobWx.Lib.Models;
@@ -70,7 +69,7 @@ app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}",
         [FromServices] ICurrentConditionsHandler currentConditionsHandler
     ) =>
     {
-        var position = new Coordinate(latitude, longitude).ToPosition();
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
         return await currentConditionsHandler.GetCurrentConditionsAsync(position);
     }).WithName("Conditions");
 
@@ -81,7 +80,7 @@ app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
         [FromRoute] double longitude,
         [FromServices] IForecastsHandler forecastsHandler) =>
     {
-        var position = new Coordinate(latitude, longitude).ToPosition();
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
         return await forecastsHandler.GetForecastsAsync(position);
     }).WithName("Forecast");
 
@@ -92,7 +91,7 @@ app.MapGet("/api/v1/alerts/{latitude:double},{longitude:double}",
         [FromRoute] double longitude,
         [FromServices] IAlertsHandler alertsHandler) =>
     {
-        var position = new Coordinate(latitude, longitude).ToPosition();
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
         return await alertsHandler.GetActiveAlertsAsync(position);
     }).WithName("Alerts");
 
