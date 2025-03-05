@@ -1,6 +1,5 @@
 ﻿using MobWx.API.Common;
 using MobWx.Lib.Models.Geocoding;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace MobWx.API.Endpoints;
@@ -77,10 +76,7 @@ public class LocationHandler : ILocationHandler
     {
         if (TryParseLocation(city, state, out string cleanCity, out string cleanState))
         {
-
-            Location location = new(0d, 0d);
-            location.CityName = cleanCity;
-            location.StateAbbreviation = cleanState;
+            var location = Location.Create(cleanCity, cleanState, string.Empty, string.Empty);
             var geolocationResponse = await _openStreetMapsAbstraction.GetGeoJsonDataAsync(location);
 
             if (geolocationResponse is null)
@@ -88,34 +84,21 @@ public class LocationHandler : ILocationHandler
                 return Results.NotFound();
             }
 
-            var geolocation = _jsonHandler.TryDeserializeGeocodeResponse(geolocationResponse);
+            NominatimGeocodeResponse? geolocation = _jsonHandler.TryDeserializeGeocodeResponse(geolocationResponse);
 
             if (geolocation is null)
             {
                 return Results.Problem("Failed to deserialize geolocation data from OpenStreetMaps.");
             }
 
-            if (geolocation.Features.Count < 1)
+            if (false == geolocation.IsValidNominatimResponse())
             {
-                return Results.Problem("Failed to get geolocation features from OpenStreetMaps.");
+                return Results.Problem("Failed to get complete geolocation data from OpenStreetMaps. Try again later or use a different city and state.");
             }
-
-            if (geolocation.Features[0].Geometry is null)
-            {
-                return Results.Problem("Failed to get geolocation feature geometry from OpenStreetMaps.");
-            }
-
-            if (geolocation.Features[0].Geometry!.CoordinateDoubles.Count < 2)
-            {
-                return Results.Problem("Failed to get geolocation feature geometry coordinates from OpenStreetMaps.");
-            }
-
+            
             try
             {
-                Location latLonOnly = geolocation.Features[0].Geometry!.GetLocation();
-                location.Lat = latLonOnly.Lat;
-                location.Lon = latLonOnly.Lon;
-                return Results.Ok(location);
+                return Results.Ok(geolocation.ToPosition());
             }
             catch (Exception ex)
             {
