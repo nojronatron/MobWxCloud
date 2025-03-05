@@ -38,3 +38,4 @@ This project is under development, with a goal of deploying to Azure by June 202
 
 - NOAA NWS [API](https://www.weather.gov/documentation/services-web-api) for weather data.
 - [Google Fonts](https://fonts.google.com/) for the Cloud Alert icon.
+- OpenStreetMaps [Nominatim API](https://nominatim.org/release-docs/develop/api/Search/) for geocoding.
