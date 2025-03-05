@@ -2,7 +2,10 @@
 
 namespace MobWx.Lib.Models.Geocoding;
 
-public class FeatureProperties
+/// <summary>
+/// Nominatim Feature Properties GeoJSON definition. See https://nominatim.org/release-docs/develop/api/Search/
+/// </summary>
+public class NominatimFeatureProperties
 {
     [JsonPropertyName("place_id")]
     public int? PlaceId { get; set; }
@@ -19,12 +22,18 @@ public class FeatureProperties
     [JsonPropertyName("category")]
     public string? Category { get; set; }
 
+    [JsonPropertyName("type")]
+    public string? PropertyType { get; set; } // "administrative"
+
+    [JsonPropertyName("importance")]
+    public double? Importance { get; set; }
+
     [JsonPropertyName("addresstype")]
     public string? AddressType { get; set; }
 
     [JsonPropertyName("name")]
-    public string? Name { get; set; }
+    public string? Name { get; set; } // "Los Angeles"
 
     [JsonPropertyName("display_name")]
-    public string? DisplayName { get; set; }
+    public string? DisplayName { get; set; } // "Los Angeles, Los Angeles County, California, United States"
 }

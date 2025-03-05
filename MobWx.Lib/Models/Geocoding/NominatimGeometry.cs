@@ -2,10 +2,13 @@
 
 namespace MobWx.Lib.Models.Geocoding;
 
-public class Geometry
+/// <summary>
+/// Nominatim Geometry GeoJSON  definition. See https://nominatim.org/release-docs/develop/api/Search/
+/// </summary>
+public class NominatimGeometry
 {
-    [JsonPropertyName("geometry")]
-    public string? GeometryType { get; set; }
+    [JsonPropertyName("type")]
+    public string? GeometryType { get; set; } // e.g. "Point"
 
     [JsonPropertyName("coordinates")]
     public List<double> CoordinateDoubles { get; set; } = [];
@@ -20,11 +23,11 @@ public class Geometry
     }
 
     /// <summary>
-    /// Get the position of the geometry
+    /// Returns a string representation of the geometry like "Point(-123.456789, 12.345678)"
     /// </summary>
     /// <returns></returns>
-    public Position GetPosition()
+    public override string ToString()
     {
-        return new Position(CoordinateDoubles[1].ToString(), CoordinateDoubles[0].ToString());
+        return $"Point({CoordinateDoubles[1]}, {CoordinateDoubles[0]})";
     }
 }
