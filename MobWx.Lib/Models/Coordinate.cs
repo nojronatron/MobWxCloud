@@ -1,36 +1,50 @@
-﻿using MobWx.Lib.Models.Base;
-
-namespace MobWx.Lib.Models;
+﻿namespace MobWx.Lib.Models;
 
 public class Coordinate : IEquatable<Coordinate>
 {
     public double? Lat { get; set; }
     public double? Lon { get; set; }
 
-    public Coordinate(double lat, double lon)
+    public QuantitativeValue? Elevation { get; set; }
+
+    /// <summary>
+    /// Create a new concrete Coordinate instance.
+    /// </summary>
+    /// <param name="lat"></param>
+    /// <param name="lon"></param>
+    /// <returns></returns>
+    public static Coordinate Create(double lat, double lon)
     {
-        Lat = lat;
-        Lon = lon;
+        return new Coordinate
+        {
+            Lat = lat,
+            Lon = lon
+        };
     }
 
     /// <summary>
-    /// Converts the Coordinate object to a Position object.
+    /// Create a new concrete Coordinate instance.
     /// </summary>
+    /// <param name="lat"></param>
+    /// <param name="lon"></param>
     /// <returns></returns>
-    public PositionBase ToPosition()
+    public static Coordinate Create(string lat, string lon)
     {
-        if (Lat is null || Lon is null)
-        {
-            return new NullPosition();
-        }
+        double.TryParse(lat, out double latValue);
+        double.TryParse(lon, out double lonValue);
 
-        return new Position(Lat.ToString(), Lon.ToString());
+        return new Coordinate
+        {
+            Lat = latValue,
+            Lon = lonValue
+        };
     }
 
     /// <summary>
     /// Determines if the current Coordinate object has null values.
+    /// Does not consider Elevation.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>True if Lat and/or Lon are null, otherwise false.</returns>
     public bool HasNulls()
     {
         return Lat is null || Lon is null;
@@ -55,7 +69,9 @@ public class Coordinate : IEquatable<Coordinate>
     }
 
     /// <summary>
-    /// Determines if the current Coordinate object is equal to another Coordinate object.
+    /// Determines if the current Coordinate object is equal to another Coordinate
+    /// object based on their Lat and Lon values, limited to 2 decimal places 
+    /// (just over 1 km N/S or E/W at the equator).
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
