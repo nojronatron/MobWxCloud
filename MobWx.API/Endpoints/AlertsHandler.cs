@@ -1,6 +1,5 @@
 ﻿using MobWx.API.Common;
 using MobWx.Lib.Models;
-using MobWx.Lib.Models.Base;
 using MobWx.Lib.NwsAlertModels;
 
 namespace MobWx.API.Endpoints;
@@ -28,9 +27,9 @@ public class AlertsHandler : IAlertsHandler
     /// <param name="httpRequest"></param>
     /// <param name="position"></param>
     /// <returns>Awaitable IResult with HTTP Status Code and Alert data or empty.</returns>
-    public async Task<IResult> GetActiveAlertsAsync(PositionBase position)
+    public async Task<IResult> GetActiveAlertsAsync(Position position)
     {
-        if (position is NullPosition)
+        if (position is null || false == position.HasCoordinates)
         {
             return Results.BadRequest("Invalid latitude (lat) or langitude (lon) values.");
         }

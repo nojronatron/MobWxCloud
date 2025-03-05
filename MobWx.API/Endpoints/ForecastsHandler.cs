@@ -1,7 +1,6 @@
 ﻿using MobWx.API.Common;
 using MobWx.Lib.ForecastModels;
 using MobWx.Lib.Models;
-using MobWx.Lib.Models.Base;
 using MobWx.Lib.PointModels;
 
 namespace MobWx.API.Endpoints;
@@ -23,9 +22,9 @@ public class ForecastsHandler : IForecastsHandler
         _nwsEndpointAbstraction = nwsEndpointAbstraction;
     }
 
-    public async Task<IResult> GetForecastsAsync(PositionBase position)
+    public async Task<IResult> GetForecastsAsync(Position position)
     {
-        if (position is NullPosition)
+        if (position is null || false == position.HasCoordinates)
         {
             return Results.BadRequest("Invalid latitude (lat) or longitude (lon) values.");
         }
