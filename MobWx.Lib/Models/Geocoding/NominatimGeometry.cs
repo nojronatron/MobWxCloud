@@ -19,7 +19,7 @@ public class NominatimGeometry
     /// <returns></returns>
     public Coordinate GetLocation()
     {
-        return Coordinate.Create(CoordinateDoubles[1], CoordinateDoubles[0]);
+        return Coordinate.Create((decimal)CoordinateDoubles[1], (decimal)CoordinateDoubles[0]);
     }
 
     /// <summary>

@@ -2,10 +2,36 @@
 
 public class Coordinate : IEquatable<Coordinate>
 {
-    public double? Lat { get; set; }
-    public double? Lon { get; set; }
+    public decimal? Lat { get; set; }
+    public decimal? Lon { get; set; }
 
     public QuantitativeValue? Elevation { get; set; }
+
+    /// <summary>
+    /// Checks for null or out of range (-90 to 90 inclusive).
+    /// </summary>
+    /// <returns>True if not null nor out of range, otherwise false.</returns>
+    public bool HasValidLatitude()
+    {
+        return (
+            Lat is not null
+            && Lat >= -90
+            && Lat <= 90
+            );
+    }
+
+    /// <summary>
+    /// Checks for null or out of range (-180 to 180 inclusive).
+    /// </summary>
+    /// <returns>True if not null nor out of range, otherwise false.</returns>
+    public bool HasValidLongitude()
+    {
+        return (
+            Lon is not null
+            && Lon >= -180
+            && Lon <= 180
+            );
+    }
 
     /// <summary>
     /// Create a new concrete Coordinate instance.
@@ -13,7 +39,7 @@ public class Coordinate : IEquatable<Coordinate>
     /// <param name="lat"></param>
     /// <param name="lon"></param>
     /// <returns></returns>
-    public static Coordinate Create(double lat, double lon)
+    public static Coordinate Create(decimal lat, decimal lon)
     {
         return new Coordinate
         {
@@ -30,8 +56,8 @@ public class Coordinate : IEquatable<Coordinate>
     /// <returns></returns>
     public static Coordinate Create(string lat, string lon)
     {
-        double.TryParse(lat, out double latValue);
-        double.TryParse(lon, out double lonValue);
+        decimal.TryParse(lat, out decimal latValue);
+        decimal.TryParse(lon, out decimal lonValue);
 
         return new Coordinate
         {
@@ -57,15 +83,15 @@ public class Coordinate : IEquatable<Coordinate>
     /// <param name="places"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public static double LimitDecimalPlaces(double num, int places)
+    public static decimal LimitDecimalPlaces(decimal num, int places)
     {
         if (places < 0 || places > 7)
         {
             throw new ArgumentOutOfRangeException(nameof(places), "The number of decimal places must be between 0 and 7.");
         }
 
-        double multiplier = Math.Pow(10, places);
-        return Math.Round(num * multiplier) / multiplier;
+        decimal multiplier = (decimal)Math.Pow(10, places);
+        return (decimal)Math.Round(num * multiplier) / multiplier;
     }
 
     /// <summary>

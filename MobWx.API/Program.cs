@@ -62,10 +62,10 @@ app.MapGet("/api/v1/location/{city},{state}",
     }).WithName("Location");
 
 // get current weather conditions from office nearest to lat, lon
-app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}",
+app.MapGet("/api/v1/conditions/{latitude:decimal},{longitude:decimal}",
     async (
-        [FromRoute] double latitude,
-        [FromRoute] double longitude,
+        [FromRoute] decimal latitude,
+        [FromRoute] decimal longitude,
         [FromServices] ICurrentConditionsHandler currentConditionsHandler
     ) =>
     {
@@ -76,8 +76,8 @@ app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}",
 // get 7-day forecast from office nearest to lat, lon
 app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
     async (
-        [FromRoute] double latitude,
-        [FromRoute] double longitude,
+        [FromRoute] decimal latitude,
+        [FromRoute] decimal longitude,
         [FromServices] IForecastsHandler forecastsHandler) =>
     {
         var position = Position.Create(Coordinate.Create(latitude, longitude));
@@ -87,8 +87,8 @@ app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
 // get alert(s) in the current zone given lat, lon
 app.MapGet("/api/v1/alerts/{latitude:double},{longitude:double}",
     async (
-        [FromRoute] double latitude,
-        [FromRoute] double longitude,
+        [FromRoute] decimal latitude,
+        [FromRoute] decimal longitude,
         [FromServices] IAlertsHandler alertsHandler) =>
     {
         var position = Position.Create(Coordinate.Create(latitude, longitude));

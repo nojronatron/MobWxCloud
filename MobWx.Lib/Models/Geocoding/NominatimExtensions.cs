@@ -142,8 +142,8 @@ public static class NominatimExtensions
         try
         {
             return Coordinate.Create(
-                (double)GetLatitude(geocodedResponse)!,
-                (double)GetLongitude(geocodedResponse)!
+                (decimal)GetLatitude(geocodedResponse)!,
+                (decimal)GetLongitude(geocodedResponse)!
             );
         }
         catch
