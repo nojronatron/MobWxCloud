@@ -1,19 +1,22 @@
 ﻿@page "/"
+
 @using MobWx.Lib.ForecastModels
+@using MobWx.Lib.Models
 @using MobWx.Lib.Models.Forms
 @using MobWx.Lib.Models.Geocoding
 @using MobWx.Lib.Models.Nws
 @using MobWx.Lib.NwsAlertModels
 @using MobWx.Web.Components.Pages.Nws
 @using System.Text.Json
-@using MobWx.Web.Models
+
 @inject ILogger<Home> logger
 @inject IHttpClientFactory httpClient
+
 @rendermode InteractiveServer
 
 <PageTitle>MobWx Home</PageTitle>
 
-@if (hasLocation)
+@if (hasPosition)
 {
     <h1>Change Location</h1>
 }
@@ -34,16 +37,20 @@ else
     <p>Late updated: @ActiveAlerts.AlertUpdateTimestamp</p>
     <ActiveAlertsList activeAlerts="ActiveAlerts" />
 }
+else
+{
+    <h3>No active alerts</h3>
+}
 
 @if (hasCurrentConditions)
 {
-    <h3>Current Conditions at @Location.City, @Location.State</h3>
+    <h3>Current Conditions: @Position.Location.CityName, @Position.Location.GetStateName()</h3>
     <CurrentConditions currentObservation="@CurrentObservation" />
 }
 
 @if(hasForecasts)
 {
-    <h3>7-Day Forecast Overview</h3>
+    <h3>7-Day Forecast Overview: @Position.Location.CityName, @Position.Location.GetStateName()</h3>
     <ForecastsList ForecastList="@ForecastResponse" />
 }
 
@@ -51,14 +58,14 @@ else
     [SupplyParameterFromForm]
     public CityStateModel CityState { get; set; } = new();
 
-    public LocationViewModel? Location { get; set; }
+    public Position? Position { get; set; }
     public CurrentObservation? CurrentObservation;
     public ForecastResponse? ForecastResponse;
     public ActiveAlerts? ActiveAlerts;
 
     string errorMessage { get; set; } = string.Empty;
 
-    private bool hasLocation { get; set; } = false;
+    private bool hasPosition { get; set; } = false;
     private bool hasCurrentConditions { get; set; } = false;
     private bool hasForecasts { get; set; } = false;
     private bool hasAlerts { get; set; } = false;
@@ -80,8 +87,32 @@ else
     {
         logger.LogInformation("Entered OnSubmitLocation handler.");
         await GetGeoLocation();
+
+        if (hasError)
+        {
+            hasCurrentConditions = false;
+            hasForecasts = false;
+            hasAlerts = false;
+            return;
+        }
+
         await GetCurrentConditions();
+
+        if (hasError)
+        {
+            hasForecasts = false;
+            hasAlerts = false;
+            return;
+        }
+
         await GetAlerts();
+
+        if (hasError)
+        {
+            hasAlerts = false;
+            return;
+        }
+
         await GetForecast();
         logger.LogInformation("Exiting OnSubmitLocation handler.");
     }
@@ -90,7 +121,7 @@ else
     {
         logger.LogInformation("Entered Get Forecast handler.");
         var client = httpClient.CreateClient("mobwxapi");
-        var relativeUri = $"/api/v1/forecast/{Location.Latitude},{Location.Longitude}";
+        var relativeUri = $"/api/v1/forecast/{Position.Coordinate.Lat},{Position.Coordinate.Lon}";
         logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
 
         var request = new HttpRequestMessage(
@@ -137,7 +168,7 @@ else
     {
         logger.LogInformation("Entered Get Alerts handler.");
         var client = httpClient.CreateClient("mobwxapi");
-        var relativeUri = $"/api/v1/alerts/{Location.Latitude},{Location.Longitude}";
+        var relativeUri = $"/api/v1/alerts/{Position.Coordinate.Lat},{Position.Coordinate.Lon}";
         logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
 
         var request = new HttpRequestMessage(
@@ -184,7 +215,7 @@ else
     {
         logger.LogInformation("Entered Get Current Conditions handler.");
         var client = httpClient.CreateClient("mobwxapi");
-        var relativeUri = $"/api/v1/conditions/{Location.Latitude},{Location.Longitude}";
+        var relativeUri = $"/api/v1/conditions/{Position.Coordinate.Lat},{Position.Coordinate.Lon}";
         logger.LogInformation("Created url from base: {base}, path: {relativeuri}", client.BaseAddress, relativeUri);
 
         var request = new HttpRequestMessage(
@@ -212,7 +243,7 @@ else
                 hasCurrentConditions = false;
                 errorMessage = "An unexpected error occurred, try again later.";
                 hasError = true;
-                Location = null;
+                Position = null;
                 CurrentObservation = null;
             }
 
@@ -240,38 +271,46 @@ else
             relativeUri
         );
 
-        try
-        {
-            var response = await client.SendAsync(request);
+        var response = await client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
+        {
+            var document = await response.Content.ReadAsStringAsync(cts.Token);
+            Position? deserializedResult;
+
+            try
             {
-                var document = await response.Content.ReadAsStringAsync(cts.Token);
-                var result = JsonSerializer.Deserialize<LocationViewModel>(document, jsonOptions);
-                logger.LogInformation("Location data received: ({lattitude}, {longitude})", result.Latitude, result.Longitude);
-                hasLocation = true;
+                deserializedResult = JsonSerializer.Deserialize<Position>(document, jsonOptions);
+            }
+            catch (JsonException ex)
+            {
+                logger.LogError("An exception was caught: {message} {stacktrace}", ex.Message, ex.StackTrace);
+                hasPosition = false;
+                errorMessage = "An unexpected error occurred, try again later or use a different city, state.";
+                hasError = true;
+                Position = null;
+                return;
+            }
+
+            // note: the API doesn't send an invalid response with a non-success status code
+            if (deserializedResult is not null && deserializedResult.HasCoordinates && deserializedResult.HasLocation)
+            {                
+                logger.LogInformation("Location data received: ({lattitude}, {longitude})", deserializedResult.Coordinate!.Lat, deserializedResult.Coordinate!.Lon);
+                hasPosition = deserializedResult.HasLocation;
                 errorMessage = string.Empty;
                 hasError = false;
-                Location = result;
+                Position = Position.Create(deserializedResult!.Coordinate!, deserializedResult.Location!);
             }
-            else
-            {
-                logger.LogWarning("Geolocation http GET failed with code {code}", response.StatusCode);
-                hasLocation = false;
-                errorMessage = "Only US-based City and State are supported.";
-                hasError = true;
-                Location = null;
-            }
-
-            logger.LogInformation("Exiting Get Geolocation handler.");
         }
-        catch (JsonException ex)
+        else
         {
-            logger.LogError("An exception was caught: {message} {stacktrace}", ex.Message, ex.StackTrace);
-            hasLocation = false;
-            errorMessage = "An unexpected error occurred, try again later or use a different city, state.";
+            logger.LogWarning("Geolocation http GET failed with code {code}", response.StatusCode);
+            hasPosition = false;
+            errorMessage = "Only US-based City and State are supported.";
             hasError = true;
-            Location = null;
+            Position = null;
         }
+
+        logger.LogInformation("Exiting Get Geolocation handler.");
     }
 }
