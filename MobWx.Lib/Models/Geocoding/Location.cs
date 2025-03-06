@@ -24,7 +24,7 @@ public class Location : IEquatable<Location>
         }
 
         string[] items = DisplayName.Split(",");
-        return items[2].Trim();
+        return items[items.Length - 2].Trim();
     }
 
     /// <summary>
