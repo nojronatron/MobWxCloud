@@ -3,7 +3,7 @@ using MobWx.API.Common;
 using MobWx.Tests.Api.TestFiles;
 using Moq;
 
-namespace MobWx.Tests.API;
+namespace MobWx.Tests.Api;
 
 public class JsonHandlerTests
 {

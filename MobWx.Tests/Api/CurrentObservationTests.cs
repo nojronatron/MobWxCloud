@@ -3,7 +3,7 @@ using MobWx.Lib.Helpers;
 using MobWx.Lib.Enums;
 using MobWx.Lib.Models.Nws;
 
-namespace MobWx.Tests.Api;
+namespace MobWx.Tests.Library;
 
 public class CurrentObservationTests
 {
