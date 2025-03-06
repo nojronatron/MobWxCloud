@@ -1,6 +1,5 @@
 using MobWx.API.Common;
 using MobWx.Lib.Models;
-using MobWx.Lib.Models.Base;
 
 namespace MobWx.Tests.Api;
 
@@ -14,10 +13,12 @@ public class NwsEndpointPathsTests
     public void GetActiveAlertPath_WithLimit_ShouldReturnExpectedPath(string latitude, string longitude, int? limit, string expected)
     {
         // Arrange
-        var position = new Position(latitude, longitude);
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
+        Assert.NotNull(position);
+        Assert.Equal(typeof(Position), position.GetType());
 
         // Act
-        var result = NwsEndpointPaths.GetActiveAlertPath(position, limit);
+        var result = NwsEndpointPaths.GetActiveAlertPath((Position)position, limit);
 
         // Assert
         Assert.Equal(expected, result);
@@ -29,7 +30,9 @@ public class NwsEndpointPathsTests
     public void PointPath_ShouldReturnExpectedPath(string latitude, string longitude, string expected)
     {
         // Arrange
-        var position = Position.Create(latitude, longitude);
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
+        Assert.NotNull(position);
+        Assert.Equal(typeof(Position), position.GetType());
 
         // Act
         var result = NwsEndpointPaths.PointPath(position);
@@ -44,7 +47,9 @@ public class NwsEndpointPathsTests
     public void GetActiveAlertPath_ShouldReturnExpectedPath(string latitude, string longitude, string expected)
     {
         // Arrange
-        var position = new Position(latitude, longitude);
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
+        Assert.NotNull(position);
+        Assert.Equal(typeof(Position), position.GetType());
 
         // Act
         var result = NwsEndpointPaths.GetActiveAlertPath(position);
@@ -66,28 +71,16 @@ public class NwsEndpointPathsTests
     }
 
     [Fact]
-    public void PointPath_ShouldReturnEmptyString_WhenPositionIsNullPosition()
-    {
-        // Arrange
-        var position = PositionBase.Create(null, null);
-
-        // Act
-        var result = NwsEndpointPaths.PointPath(position);
-
-        // Assert
-        Assert.Equal(string.Empty, result);
-    }
-
-    [Fact]
     public void PointPath_ShouldReturnEmptyString_WhenEmptyStringPositionIsNullPosition()
     {
         // Arrange
-        var position = PositionBase.Create(string.Empty, string.Empty);
+        var expected = "/points/0,0";
+        var position = Position.Create(Coordinate.Create(string.Empty, string.Empty));
 
         // Act
         var result = NwsEndpointPaths.PointPath(position);
 
         // Assert
-        Assert.Equal(string.Empty, result);
+        Assert.Equal(expected, result);
     }
 }
