@@ -14,7 +14,7 @@ namespace MobWx.Tests.Library
             {
                 Id = "123",
                 Geometry = "POINT(45,-123)",
-                StationElevationM = new Elevation { Value = 100, UnitCode = "wmoUnit:m" },
+                StationElevationM = new QuantitativeValue { Value = 100, UnitCode = "wmoUnit:m" },
                 Station = "TestStation",
                 Timestamp = new DateTime(2025, 1, 31, 3, 53, 0),
                 RawMessage = "Test raw message",
