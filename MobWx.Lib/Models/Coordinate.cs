@@ -5,6 +5,11 @@ public class Coordinate : IEquatable<Coordinate>
     public decimal? Lat { get; set; }
     public decimal? Lon { get; set; }
 
+    private const decimal MIN_LAT = -90m;
+    private const decimal MAX_LAT = 90m;
+    private const decimal MIN_LON = -180m;
+    private const decimal MAX_LON = 180m;
+
     public QuantitativeValue? Elevation { get; set; }
 
     /// <summary>
@@ -15,8 +20,8 @@ public class Coordinate : IEquatable<Coordinate>
     {
         return (
             Lat is not null
-            && Lat >= -90
-            && Lat <= 90
+            && Lat >= MIN_LAT
+            && Lat <= MAX_LAT
             );
     }
 
@@ -28,8 +33,8 @@ public class Coordinate : IEquatable<Coordinate>
     {
         return (
             Lon is not null
-            && Lon >= -180
-            && Lon <= 180
+            && Lon >= MIN_LON
+            && Lon <= MAX_LON
             );
     }
 
@@ -45,24 +50,6 @@ public class Coordinate : IEquatable<Coordinate>
         {
             Lat = lat,
             Lon = lon
-        };
-    }
-
-    /// <summary>
-    /// Create a new concrete Coordinate instance.
-    /// </summary>
-    /// <param name="lat"></param>
-    /// <param name="lon"></param>
-    /// <returns></returns>
-    public static Coordinate Create(string lat, string lon)
-    {
-        decimal.TryParse(lat, out decimal latValue);
-        decimal.TryParse(lon, out decimal lonValue);
-
-        return new Coordinate
-        {
-            Lat = latValue,
-            Lon = lonValue
         };
     }
 
