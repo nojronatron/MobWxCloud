@@ -20,10 +20,10 @@ namespace MobWx.Tests.Library
                 RawMessage = "Test raw message",
                 TextDescription = "Cloudy",
                 Icon = "http://example.com/icon.png",
-                TemperatureC = new QuantitativeValue { Value = 7.8, UnitCode = "wmoUnit:degC" },
-                DewpointC = new QuantitativeValue { Value = -1.1, UnitCode = "wmoUnit:degC" },
+                TemperatureC = new QuantitativeValue { Value = 7.8m, UnitCode = "wmoUnit:degC" },
+                DewpointC = new QuantitativeValue { Value = -1.1m, UnitCode = "wmoUnit:degC" },
                 WindDirection = new QuantitativeValue { Value = 170, UnitCode = "wmoUnit:degree_(angle)" },
-                WindSpeedKph = new QuantitativeValue { Value = 18.36, UnitCode = "wmoUnit:km_h-1" },
+                WindSpeedKph = new QuantitativeValue { Value = 18.36m, UnitCode = "wmoUnit:km_h-1" },
                 WindGustKph = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:km_h-1" },
                 BarometricPressurePa = new QuantitativeValue { Value = 101860, UnitCode = "wmoUnit:Pa" },
                 VisibilityM = new QuantitativeValue { Value = 16090, UnitCode = "wmoUnit:m" },
@@ -31,7 +31,7 @@ namespace MobWx.Tests.Library
                 MinTempCLast24Hours = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
                 PrecipitationLastHourMm = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:mm" },
                 RhPercent = new QuantitativeValue { Value = 93, UnitCode = "wmoUnit:percent" },
-                WindChillC = new QuantitativeValue { Value = 4.8, UnitCode = "wmoUnit:degC" },
+                WindChillC = new QuantitativeValue { Value = 4.8m, UnitCode = "wmoUnit:degC" },
                 HeatIndexC = new QuantitativeValue { Value = null, UnitCode = "wmoUnit:degC" },
                 CloudLayers = new List<CloudLayer>
                 {

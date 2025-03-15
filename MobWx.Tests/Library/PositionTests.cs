@@ -1,208 +1,120 @@
 using MobWx.Lib.Models;
-using MobWx.Lib.Models.Base;
-using Xunit;
+using MobWx.Lib.Models.Geocoding;
 
 namespace MobWx.Tests.Library;
 
 public class PositionTests
 {
     [Fact]
-    public void Create_ValidLatitudeAndLongitude_ReturnsPosition()
+    public void HasCoordinates_ReturnsTrue_WhenCoordinateIsValid()
     {
         // Arrange
-        string latitude = "45.1234";
-        string longitude = "-93.1234";
+        var coordinate = Coordinate.Create(40.7128m, -74.0060m);
+        var position = Position.Create(coordinate);
 
         // Act
-        PositionBase position = PositionBase.Create(latitude, longitude);
+        var result = position.HasCoordinates;
 
         // Assert
-        Assert.IsType<Position>(position);
-        Assert.Equal(latitude, position.Latitude);
-        Assert.Equal(longitude, position.Longitude);
+        Assert.True(result);
     }
 
     [Fact]
-    public void Create_InvalidLatitude_ReturnsNullPosition()
+    public void HasCoordinates_ReturnsFalse_WhenCoordinateIsNull()
     {
         // Arrange
-        string latitude = "100.1234"; // Invalid latitude
-        string longitude = "-93.1234";
+        // Note: This is an anti-pattern at this point
+        var coordinate = new Coordinate { Lat = null, Lon = null };
+        var position = Position.Create(coordinate); 
 
         // Act
-        PositionBase position = PositionBase.Create(latitude, longitude);
+        var result = position.HasCoordinates;
 
         // Assert
-        Assert.IsType<NullPosition>(position);
+        Assert.False(result);
     }
 
     [Fact]
-    public void Create_InvalidLongitude_ReturnsNullPosition()
+    public void HasLocation_ReturnsTrue_WhenLocationIsValid()
     {
         // Arrange
-        string latitude = "45.1234";
-        string longitude = "-200.1234"; // Invalid longitude
+        var location = Location.Create("New York", "NY", "test-license", "test-display-name");
+        var position = Position.Create(location);
 
         // Act
-        PositionBase position = PositionBase.Create(latitude, longitude);
+        var result = position.HasLocation;
 
         // Assert
-        Assert.IsType<NullPosition>(position);
+        Assert.True(result);
     }
 
     [Fact]
-    public void Create_NullOrWhitespaceLatitudeOrLongitude_ReturnsNullPosition()
+    public void HasLocation_ReturnsFalse_WhenLocationIsNull()
     {
         // Arrange
-        string? latitude = null;
-        string? longitude = "-93.1234";
+        var position = new Position();
 
         // Act
-        PositionBase position = PositionBase.Create(latitude, longitude);
+        var result = position.HasLocation;
 
         // Assert
-        Assert.IsType<NullPosition>(position);
-
-        // Arrange
-        latitude = "45.1234";
-        longitude = null;
-
-        // Act
-        position = PositionBase.Create(latitude, longitude);
-
-        // Assert
-        Assert.IsType<NullPosition>(position);
+        Assert.False(result);
     }
 
     [Fact]
-    public void ToString_ValidPosition_ReturnsFormattedString()
+    public void HasLocation_ReturnsFalse_WhenLocationHasEmptyStringValues()
     {
         // Arrange
-        string latitude = "45.1234";
-        string longitude = "-93.1234";
-        Position position = new Position(latitude, longitude);
+        var location = Location.Create(string.Empty, string.Empty, string.Empty, string.Empty);
+        var position = Position.Create(location);
 
         // Act
-        string result = position.ToString();
+        var result = position.HasLocation;
 
         // Assert
-        Assert.Equal("45.1234,-93.1234", result);
+        Assert.False(result);
     }
 
     [Fact]
-    public void ToString_NullPosition_ReturnsEmptyString()
+    public void Create_WithCoordinateAndLocation_ReturnsNewPositionInstance()
     {
         // Arrange
-        string expected = string.Empty;
-        NullPosition nullPosition = new NullPosition();
+        var coordinate = Coordinate.Create(40.7128m, -74.0060m);
+        var location = Location.Create("New York", "NY", "test-license", "test-display-name");
 
         // Act
-        string result = nullPosition.ToString();
+        var position = Position.Create(coordinate, location);
 
         // Assert
-        Assert.Equal(expected, result);
+        Assert.Equal(coordinate, position.Coordinate);
+        Assert.Equal(location, position.Location);
     }
 
     [Fact]
-    public void IsEmpty_ShouldReturnTrue_WhenLatitudeAndLongitudeAreEmpty()
+    public void Create_WithCoordinateOnly_ReturnsNewPositionInstance()
     {
         // Arrange
+        var coordinate = Coordinate.Create(40.7128m, -74.0060m);
+
         // Act
-        var position = Position.Create(string.Empty, string.Empty);
+        var position = Position.Create(coordinate);
 
         // Assert
-        Assert.True(position is NullPosition);
+        Assert.Equal(coordinate, position.Coordinate);
+        Assert.Null(position.Location);
     }
 
     [Fact]
-    public void IsEmpty_ShouldReturnFalse_WhenLatitudeAndLongitudeAreNotEmpty()
+    public void Create_WithLocationOnly_ReturnsNewPositionInstance()
     {
         // Arrange
-        // Act
-        var position = Position.Create("45.0", "90.0");
-
-        // Assert
-        Assert.True(position is not NullPosition);
-    }
-
-    [Theory]
-    [InlineData("45.0", true)]
-    [InlineData("-90.0", true)]
-    [InlineData("90.0", true)]
-    [InlineData("91.0", false)]
-    [InlineData("-91.0", false)]
-    [InlineData("", false)]
-    [InlineData(null, false)]
-    public void IsValidLatitude_ShouldReturnExpectedResult(string latitude, bool expected)
-    {
-        // Act
-        var result = Position.IsValidLatitude(latitude);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("90.0", true)]
-    [InlineData("-180.0", true)]
-    [InlineData("180.0", true)]
-    [InlineData("181.0", false)]
-    [InlineData("-181.0", false)]
-    [InlineData("", false)]
-    [InlineData(null, false)]
-    public void IsValidLongitude_ShouldReturnExpectedResult(string longitude, bool expected)
-    {
-        // Act
-        var result = Position.IsValidLongitude(longitude);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Theory]
-    [InlineData("45.12345", "45.1234")]
-    [InlineData("45.1", "45.1")]
-    [InlineData("45.123", "45.123")]
-    [InlineData("45.1234", "45.1234")]
-    public void LimitToFourDecimalPlaces_ShouldReturnExpectedResult(string coordinate, string expected)
-    {
-        // Act
-        var result = Position.LimitToFourDecimalPlaces(coordinate);
-
-        // Assert
-        Assert.Equal(expected, result);
-    }
-
-    [Fact]
-    public void CreatePosition_ShouldReturnNullPosition_WhenLatitudeOrLongitudeIsEmpty()
-    {
-        // Act
-        var result = Position.Create(string.Empty, "90.0");
-
-        // Assert
-        Assert.IsType<NullPosition>(result);
-    }
-
-    [Fact]
-    public void CreatePosition_ShouldReturnPosition_WhenLatitudeAndLongitudeAreValid()
-    {
-        // Act
-        var result = Position.Create("45.0", "90.0");
-
-        // Assert
-        Assert.IsType<Position>(result);
-    }
-
-    [Fact]
-    public void ToString_ShouldReturnFormattedString()
-    {
-        // Arrange
-        var position = Position.Create("45.0", "90.0");
+        var location = Location.Create("City of New York", "New York", "license text", "City of New York, New York (Manhattan), New York, United States");
 
         // Act
-        var result = position.ToString();
+        var position = Position.Create(location);
 
         // Assert
-        Assert.Equal("45.0,90.0", result);
+        Assert.Equal(location, position.Location);
+        Assert.Null(position.Coordinate);
     }
 }

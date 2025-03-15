@@ -1,0 +1,35 @@
+@MobWx.API_HostAddress = http://localhost:59464
+@MobWx.API_Version = api/v1
+@MobWx.Conditions = conditions
+@MobWx.Forecast = forecast
+@MobWx.Alerts = alerts
+
+
+### Walla Walla, WA
+GET {{MobWx.API_HostAddress}}/{{MobWx.API_Version}}/{{conditions}}/47.09462,-118.2858
+Accept: application/json
+
+### Seattle, WA
+GET https://localhost:64023/api/v1/conditions/47.6191,-122.3026
+Accept: application/json
+
+### Holly (Paine Field, Everett, WA)
+GET https://localhost:64835/api/v1/conditions/47.898434,-122.264881
+Accept: application/json
+
+### Woodinville, WA
+GET https://localhost:64835/api/v1/conditions/47.755,-122.164
+Accept: application/json
+
+### Forecast Zone Observations Example
+https://api.weather.gov/zones/forecast/WAZ556/observations
+Accept: application/ld+json
+User-Agent: (MobWXCloud,JonRumseyDev@gmail.com)
+
+### Alerts Active by Zone
+GET https://api.weather.gov/alerts/active?zone=WAZ556&limit=10
+Accept: application/ld+json
+User-Agent: (MobWXCloud,JonRumseyDev@gmail.com)
+
+### Zone Forecast and Conditions Calls Might Be Broken Stay Away
+
