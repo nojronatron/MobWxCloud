@@ -5,13 +5,13 @@ namespace MobWx.Lib.Models;
 public class QuantitativeValue
 {
     [JsonPropertyName("value")]
-    public double? Value { get; set; }
+    public decimal? Value { get; set; }
 
     [JsonPropertyName("maxValue")]
-    public double? MaxValue { get; set; }
+    public decimal? MaxValue { get; set; }
 
     [JsonPropertyName("minValue")]
-    public double? MinValue { get; set; }
+    public decimal? MinValue { get; set; }
 
     [JsonPropertyName("unitCode")]
     public string UnitCode { get; set; } = string.Empty;
