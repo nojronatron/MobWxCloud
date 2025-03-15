@@ -31,6 +31,12 @@ else
     <button type="submit" class="btn btn-primary" @onclick="OnSubmitLocation">Get Weather</button>
 </EditForm>
 
+@if(hasError)
+{
+    <h3>Whoops!</h3>
+    <p>@errorMessage</p>
+}
+
 @if (@AlertsAvailable)
 {
     <h3>Current Watches, Warnings, and Advisories (@ActiveAlerts.Count)</h3>
@@ -86,6 +92,12 @@ else
     public async Task OnSubmitLocation()
     {
         logger.LogInformation("Entered OnSubmitLocation handler.");
+        hasError = false;
+        errorMessage = string.Empty;
+        hasCurrentConditions = false;
+        hasForecasts = false;
+        hasAlerts = false;
+
         await GetGeoLocation();
 
         if (hasError)
