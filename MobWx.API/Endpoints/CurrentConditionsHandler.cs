@@ -1,5 +1,4 @@
 ﻿using MobWx.API.Common;
-using MobWx.Lib.Models.Base;
 using MobWx.Lib.Models;
 using MobWx.Lib.Models.Nws;
 
@@ -23,9 +22,9 @@ public class CurrentConditionsHandler : ICurrentConditionsHandler
     /// </summary>
     /// <param name="position"></param>
     /// <returns></returns>
-    public async Task<IResult> GetCurrentConditionsAsync(PositionBase position)
+    public async Task<IResult> GetCurrentConditionsAsync(Position position)
     {
-        if (position is NullPosition)
+        if (position is null || false == position.HasCoordinates)
         {
             return Results.NotFound("Position is invalid. Try again with a valid location.");
         }

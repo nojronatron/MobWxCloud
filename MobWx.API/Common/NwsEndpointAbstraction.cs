@@ -1,5 +1,4 @@
 ﻿using MobWx.Lib.Models;
-using MobWx.Lib.Models.Base;
 using MobWx.Lib.PointModels;
 
 namespace MobWx.API.Common
@@ -23,7 +22,7 @@ namespace MobWx.API.Common
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public async Task<string> GetPointDataAsync(PositionBase position)
+        public async Task<string> GetPointDataAsync(Position position)
         {
             var httpClient = _httpClientFactory.CreateClient("NwsApi");
             var request = new HttpRequestMessage(HttpMethod.Get, NwsEndpointPaths.PointPath(position));
@@ -34,7 +33,7 @@ namespace MobWx.API.Common
                 return await response.Content.ReadAsStringAsync();
             }
 
-            _logger.LogDebug("Failed to get point data for {positionlongitude}, {positionlongitude}", position.Longitude, position.Longitude);
+            _logger.LogDebug("Failed to get point data for {positionlongitude}, {positionlongitude}", position.Coordinate!.Lat, position.Coordinate.Lon);
             _logger.LogError("Unable to process data from the NWS NOAA API. Try again later.");
             return string.Empty;
         }
@@ -143,7 +142,7 @@ namespace MobWx.API.Common
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public async Task<string> GetNwsAlertsAsync(PositionBase position)
+        public async Task<string> GetNwsAlertsAsync(Position position)
         {
             var httpClient = _httpClientFactory.CreateClient("NwsApi");
             var request = new HttpRequestMessage(

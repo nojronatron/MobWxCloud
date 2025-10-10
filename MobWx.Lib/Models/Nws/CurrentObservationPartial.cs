@@ -30,10 +30,10 @@ public partial class CurrentObservation
             : null;
 
         int? pressureHpa = observation.BarometricPressurePa?.ToNullableInt();
-        double? pressureMb = pressureHpa is not null
+        decimal? pressureMb = pressureHpa is not null
             ? UnitConverter.ToMillibars(pressureHpa.Value)
             : null;
-        double? pressureIn = pressureHpa is not null
+        decimal? pressureIn = pressureHpa is not null
             ? UnitConverter.ToInchesMercury(pressureHpa.Value)
             : null;
 
@@ -52,7 +52,7 @@ public partial class CurrentObservation
             : null;
 
         int? precipitationMmHr = observation.PrecipitationLastHourMm?.ToNullableInt();
-        double? precipitationInchesHour = precipitationMmHr is not null
+        decimal? precipitationInchesHour = precipitationMmHr is not null
             ? UnitConverter.ToInches(precipitationMmHr.Value)
             : null;
 
@@ -89,7 +89,7 @@ public partial class CurrentObservation
         return new CurrentObservation
         {
             StationLocation = observation.Geometry,
-            StationElevation = observation.StationElevationM?.ToNullableDouble(),
+            StationElevation = observation.StationElevationM?.ToNullableDecimal(),
             StationUri = observation.Station ?? string.Empty,
             Timestamp = observation.Timestamp ?? DateTime.MinValue,
             RawMessage = observation.RawMessage ?? string.Empty,

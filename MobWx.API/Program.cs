@@ -23,7 +23,6 @@
 */
 
 using Microsoft.AspNetCore.Mvc;
-using MobWx.API.Common;
 using MobWx.API.Endpoints;
 using MobWx.API.ServerConfig;
 using MobWx.Lib.Models;
@@ -63,36 +62,36 @@ app.MapGet("/api/v1/location/{city},{state}",
     }).WithName("Location");
 
 // get current weather conditions from office nearest to lat, lon
-app.MapGet("/api/v1/conditions/{latitude:double},{longitude:double}",
+app.MapGet("/api/v1/conditions/{latitude:decimal},{longitude:decimal}",
     async (
-        [FromRoute] double latitude,
-        [FromRoute] double longitude,
+        [FromRoute] decimal latitude,
+        [FromRoute] decimal longitude,
         [FromServices] ICurrentConditionsHandler currentConditionsHandler
     ) =>
     {
-        var position = new Coordinate(latitude, longitude).ToPosition();
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
         return await currentConditionsHandler.GetCurrentConditionsAsync(position);
     }).WithName("Conditions");
 
 // get 7-day forecast from office nearest to lat, lon
 app.MapGet("/api/v1/forecast/{latitude:double},{longitude:double}",
     async (
-        [FromRoute] double latitude,
-        [FromRoute] double longitude,
+        [FromRoute] decimal latitude,
+        [FromRoute] decimal longitude,
         [FromServices] IForecastsHandler forecastsHandler) =>
     {
-        var position = new Coordinate(latitude, longitude).ToPosition();
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
         return await forecastsHandler.GetForecastsAsync(position);
     }).WithName("Forecast");
 
 // get alert(s) in the current zone given lat, lon
 app.MapGet("/api/v1/alerts/{latitude:double},{longitude:double}",
     async (
-        [FromRoute] double latitude,
-        [FromRoute] double longitude,
+        [FromRoute] decimal latitude,
+        [FromRoute] decimal longitude,
         [FromServices] IAlertsHandler alertsHandler) =>
     {
-        var position = new Coordinate(latitude, longitude).ToPosition();
+        var position = Position.Create(Coordinate.Create(latitude, longitude));
         return await alertsHandler.GetActiveAlertsAsync(position);
     }).WithName("Alerts");
 

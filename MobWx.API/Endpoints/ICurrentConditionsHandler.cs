@@ -1,9 +1,9 @@
-﻿using MobWx.Lib.Models.Base;
+﻿using MobWx.Lib.Models;
 
 namespace MobWx.API.Endpoints
 {
     public interface ICurrentConditionsHandler
     {
-        Task<IResult> GetCurrentConditionsAsync(PositionBase position);
+        Task<IResult> GetCurrentConditionsAsync(Position position);
     }
 }

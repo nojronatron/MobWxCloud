@@ -21,12 +21,21 @@ This project is under development, with a goal of deploying to Azure by June 202
 
 (incomplete list while in early development)
 
+- Fetch and display weather data to users, leveraging custom API.
 - Fetch latitude, longitude from city and state inputs (US only).
 - Fetch current weather conditions from NWS API and convert for MobWx client consumption.
 - Fetch active alerts from NWS API and convert for MobWx client consumption.
 - Fetch forecast data from NWS API and convert for MobWx client consumption.
-- Leverage .NET Aspire v9.0 for dev time productivity and debugging.
+- Leverage .NET Aspire v9.0 for dev time productivity, debugging, and Service Discovery.
 
 ## Releases
 
 - 0.0.1-SNAPSHOT: Initial version
+
+## License
+
+## Attributions
+
+- NOAA NWS [API](https://www.weather.gov/documentation/services-web-api) for weather data.
+- [Google Fonts](https://fonts.google.com/) for the Cloud Alert icon.
+- OpenStreetMaps [Nominatim API](https://nominatim.org/release-docs/develop/api/Search/) for geocoding.

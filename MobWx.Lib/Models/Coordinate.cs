@@ -1,36 +1,63 @@
-﻿using MobWx.Lib.Models.Base;
-
-namespace MobWx.Lib.Models;
+﻿namespace MobWx.Lib.Models;
 
 public class Coordinate : IEquatable<Coordinate>
 {
-    public Latitude? Lat { get; set; }
-    public Longitude? Lon { get; set; }
+    public decimal? Lat { get; set; }
+    public decimal? Lon { get; set; }
 
-    public Coordinate(double lat, double lon)
+    private const decimal MIN_LAT = -90m;
+    private const decimal MAX_LAT = 90m;
+    private const decimal MIN_LON = -180m;
+    private const decimal MAX_LON = 180m;
+
+    public QuantitativeValue? Elevation { get; set; }
+
+    /// <summary>
+    /// Checks for null or out of range (-90 to 90 inclusive).
+    /// </summary>
+    /// <returns>True if not null nor out of range, otherwise false.</returns>
+    public bool HasValidLatitude()
     {
-        Lat = new Latitude { Value = lat };
-        Lon = new Longitude { Value = lon };
+        return (
+            Lat is not null
+            && Lat >= MIN_LAT
+            && Lat <= MAX_LAT
+            );
     }
 
     /// <summary>
-    /// Converts the Coordinate object to a Position object.
+    /// Checks for null or out of range (-180 to 180 inclusive).
     /// </summary>
-    /// <returns></returns>
-    public PositionBase ToPosition()
+    /// <returns>True if not null nor out of range, otherwise false.</returns>
+    public bool HasValidLongitude()
     {
-        if (Lat is null || Lon is null)
-        {
-            return new NullPosition();
-        }
+        return (
+            Lon is not null
+            && Lon >= MIN_LON
+            && Lon <= MAX_LON
+            );
+    }
 
-        return new Position(Lat.GetValue().ToString(), Lon.GetValue().ToString());
+    /// <summary>
+    /// Create a new concrete Coordinate instance.
+    /// </summary>
+    /// <param name="lat"></param>
+    /// <param name="lon"></param>
+    /// <returns></returns>
+    public static Coordinate Create(decimal lat, decimal lon)
+    {
+        return new Coordinate
+        {
+            Lat = lat,
+            Lon = lon
+        };
     }
 
     /// <summary>
     /// Determines if the current Coordinate object has null values.
+    /// Does not consider Elevation.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>True if Lat and/or Lon are null, otherwise false.</returns>
     public bool HasNulls()
     {
         return Lat is null || Lon is null;
@@ -43,19 +70,21 @@ public class Coordinate : IEquatable<Coordinate>
     /// <param name="places"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public static double LimitDecimalPlaces(double num, int places)
+    public static decimal LimitDecimalPlaces(decimal num, int places)
     {
         if (places < 0 || places > 7)
         {
             throw new ArgumentOutOfRangeException(nameof(places), "The number of decimal places must be between 0 and 7.");
         }
 
-        double multiplier = Math.Pow(10, places);
-        return Math.Round(num * multiplier) / multiplier;
+        decimal multiplier = (decimal)Math.Pow(10, places);
+        return (decimal)Math.Round(num * multiplier) / multiplier;
     }
 
     /// <summary>
-    /// Determines if the current Coordinate object is equal to another Coordinate object.
+    /// Determines if the current Coordinate object is equal to another Coordinate
+    /// object based on their Lat and Lon values, limited to 2 decimal places 
+    /// (just over 1 km N/S or E/W at the equator).
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
@@ -92,44 +121,6 @@ public class Coordinate : IEquatable<Coordinate>
     /// <returns></returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Lat?.Value, Lon?.Value);
-    }
-}
-
-public class Latitude
-{
-    public const double MaxValue = 90.0;
-    public double Value { get; set; }
-
-    public double GetValue()
-    {
-        int sign = Value < 0 ? -1 : 1;
-        double currVal = Math.Abs(Value);
-
-        while (currVal > MaxValue)
-        {
-            currVal -= MaxValue;
-        }
-
-        return sign * currVal;
-    }
-}
-
-public class Longitude
-{
-    public const double MaxValue = 180.0;
-    public double Value { get; set; }
-
-    public double GetValue()
-    {
-        int sign = Value < 0 ? -1 : 1;
-        double currVal = Math.Abs(Value);
-
-        while (currVal > MaxValue)
-        {
-            currVal -= MaxValue;
-        }
-
-        return sign * currVal;
+        return HashCode.Combine(Lat, Lon);
     }
 }

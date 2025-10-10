@@ -2,18 +2,21 @@
 
 namespace MobWx.Lib.Models.Geocoding;
 
-public class Feature
+/// <summary>
+/// Nominatim Feature GeoJSON definition. See https://nominatim.org/release-docs/develop/api/Search/
+/// </summary>
+public class NominatimFeature
 {
     [JsonPropertyName("type")]
     public string? FeatureType { get; set; }
 
     [JsonPropertyName("properties")]
-    public FeatureProperties? FeatureProperties { get; set; }
+    public NominatimFeatureProperties? FeatureProperties { get; set; }
 
     // [ lon, lat, lon, lat, ..., ... ]
     [JsonPropertyName("bbox")]
     public List<double> BBox { get; set; } = [];
 
     [JsonPropertyName("geometry")]
-    public Geometry? Geometry { get; set; }
+    public NominatimGeometry? Geometry { get; set; }
 }

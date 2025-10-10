@@ -21,17 +21,17 @@ public class UnitConverter
         return (int)Math.Round(kilometersPerHour * mult);
     }
 
-    public static double ToInchesMercury(int pascals)
+    public static decimal ToInchesMercury(int pascals)
     {
         // divide pascals by 3386.4 to get inches of mercury
-        double mult = 3386.4;
+        decimal mult = 3386.4m;
         return Math.Round(pascals / mult, 2);
     }
 
-    public static double ToMillibars(int pascals)
+    public static decimal ToMillibars(int pascals)
     {
         // millibars are one 100th of a Pascal
-        double mult = 0.01;
+        decimal mult = 0.01m;
         return Math.Round(pascals * mult, 1);
     }
 

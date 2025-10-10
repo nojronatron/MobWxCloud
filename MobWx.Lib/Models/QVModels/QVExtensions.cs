@@ -10,7 +10,7 @@ public static class QVExtensions
     /// <returns></returns>
     public static int ToInt(this QuantitativeValue qv)
     {
-        return (int)Math.Round((double)qv.Value!, 0);
+        return (int)Math.Round((decimal)qv.Value!, 0);
     }
 
     /// <summary>
@@ -20,25 +20,25 @@ public static class QVExtensions
     /// <returns></returns>
     public static int? ToNullableInt(this QuantitativeValue qv)
     {
-        return qv.Value is not null ? (int)Math.Round((double)qv.Value, 0) : null;
+        return qv.Value is not null ? (int)Math.Round((decimal)qv.Value, 0) : null;
     }
 
     /// <summary>
     /// Convert the value to a double.
     /// </summary>
     /// <returns></returns>
-    public static double ToDouble(this QuantitativeValue qv)
+    public static decimal ToDecimal(this QuantitativeValue qv)
     {
-        return (double)Math.Round((double)qv.Value!, 2);
+        return (decimal)Math.Round((decimal)qv.Value!, 2);
     }
 
     /// <summary>
     /// Convert the value to a nullable double.
     /// </summary>
     /// <returns></returns>
-    public static double? ToNullableDouble(this QuantitativeValue qv)
+    public static decimal? ToNullableDecimal(this QuantitativeValue qv)
     {
-        return qv.Value is not null ? (double)Math.Round((double)qv.Value, 2) : null;
+        return qv.Value is not null ? (decimal)Math.Round((decimal)qv.Value, 2) : null;
     }
 
     /// <summary>

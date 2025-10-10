@@ -1,8 +1,8 @@
-﻿using MobWx.Lib.Models.Base;
+﻿using MobWx.Lib.Models;
 
 namespace MobWx.API.Endpoints;
 
 public interface IForecastsHandler
 {
-    Task<IResult> GetForecastsAsync(PositionBase position);
+    Task<IResult> GetForecastsAsync(Position position);
 }
